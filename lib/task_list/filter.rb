@@ -23,12 +23,6 @@ class TaskList
   # - [ ] incomplete
   # - [x] complete
   # ```
-  #
-  # Results
-  # -------
-  #
-  # The following keys are written to the result hash:
-  #   :task_list_items - An array of TaskList::Item objects.
   class Filter < HTML::Pipeline::Filter
 
     ListSelector = [
@@ -56,14 +50,6 @@ class TaskList
     # Private: increments and returns the next item index Integer.
     def next_index
       @index += 1
-    end
-
-    # List of `TaskList::Item` objects that were recognized in the document.
-    # This is available in the result hash as `:task_list_items`.
-    #
-    # Returns an Array of TaskList::Item objects.
-    def task_list_items
-      result[:task_list_items] ||= []
     end
 
     # Renders the item checkbox in a span including the item index and state.
@@ -123,8 +109,6 @@ class TaskList
           end
         if match = TaskList.item?(inner)
           item = TaskList::Item.new(next_index, match, inner)
-          task_list_items << item
-
           add_css_class(li, 'task-list-item')
           outer.inner_html = render_task_list_item(item)
         end
