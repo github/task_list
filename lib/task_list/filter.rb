@@ -1,5 +1,6 @@
 # encoding: utf-8
 require 'html/pipeline'
+require 'task_list'
 
 class TaskList
   # Returns a `Nokogiri::DocumentFragment` object.
