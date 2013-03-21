@@ -24,7 +24,7 @@
 enableTaskList = (container) ->
   if container.attr('data-task-list-update-url').length > 0
     container.addClass('context-loader-container')
-    unless container.find('.context-loader-overlay').addBack('.context-loader-overlay').length
+    unless container.is('.context-loader-overlay') or container.find('.context-loader-overlay').length
       container.addClass('context-loader-overlay')
     container.
       find('.task-list-item').addClass('enabled').
