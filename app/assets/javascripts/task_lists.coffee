@@ -62,7 +62,7 @@ updateTaskListItem = (item) ->
     dataType: 'json'
     success: (data) ->
       if data.stale
-        window.location.href = window.location.href
+        window.location.reload()
       else
         container.attr('data-version', data.new_version)
         container.trigger('tasklist:updated', data)
