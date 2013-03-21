@@ -46,7 +46,7 @@ disableTaskList = (container) ->
 # since the user is trying to update old data. An error should be displayed
 # when the page loads. In Rails, you can use `flash[:error]`.
 updateTaskListItem = (item) ->
-  container = item.parents('.js-task-list-container')
+  container = item.closest('.js-task-list-container')
   url  = container.attr('data-task-list-update-url')
   data =
     item:    item.attr('data-item-index')
