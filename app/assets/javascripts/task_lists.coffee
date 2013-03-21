@@ -10,7 +10,7 @@
 #
 # Events:
 #
-# When an update succeeds, a `updated.taskList' event is triggered, passing
+# When an update succeeds, a `tasklist:updated' event is triggered, passing
 # along whatever data the request responded with. Handle this event if you
 # need additional behavior.
 #
@@ -65,7 +65,7 @@ updateTaskListItem = (item) ->
         window.location.href = window.location.href
       else
         container.attr('data-version', data.new_version)
-        container.trigger('updated.task-list', data)
+        container.trigger('tasklist:updated', data)
     error: (e) ->
       console.log 'error', e
     complete: ->
