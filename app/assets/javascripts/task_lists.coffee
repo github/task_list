@@ -23,21 +23,16 @@
 
 enableTaskList = (container) ->
   if container.attr('data-task-list-update-url').length > 0
-    container.addClass('context-loader-container')
-    unless container.is('.context-loader-overlay') or container.find('.context-loader-overlay').length
-      container.addClass('context-loader-overlay')
     container.
       find('.task-list-item').addClass('enabled').
       find('.task-list-item-checkbox').attr('disabled', null)
-    container.closest('.context-loader-container').find('.context-loader:first').
-      removeClass 'is-context-loading'
+    comment.trigger('tasklist:enabled')
 
 disableTaskList = (container) ->
   container.
     find('.task-list-item').removeClass('enabled').
     find('.task-list-item-checkbox').attr('disabled', 'disabled')
-  container.closest('.context-loader-container').find('.context-loader:first').
-    addClass 'is-context-loading'
+  comment.trigger('tasklist:disabled')
 
 # Submit updates to task list items asynchronously.
 # Successful updates won't require re-rendering to represent reality.
