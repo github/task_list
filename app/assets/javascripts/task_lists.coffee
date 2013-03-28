@@ -55,6 +55,7 @@ updateTaskListItem = (item) ->
     url: url
     data: data
     dataType: 'json'
+    context: container[0]
     success: (data) ->
       if data.stale
         window.location.reload()
