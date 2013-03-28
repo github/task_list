@@ -26,13 +26,13 @@ enableTaskList = (container) ->
     container.
       find('.task-list-item').addClass('enabled').
       find('.task-list-item-checkbox').attr('disabled', null)
-    comment.trigger('tasklist:enabled')
+    container.trigger('tasklist:enabled')
 
 disableTaskList = (container) ->
   container.
     find('.task-list-item').removeClass('enabled').
     find('.task-list-item-checkbox').attr('disabled', 'disabled')
-  comment.trigger('tasklist:disabled')
+  container.trigger('tasklist:disabled')
 
 # Submit updates to task list items asynchronously.
 # Successful updates won't require re-rendering to represent reality.
