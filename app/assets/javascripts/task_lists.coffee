@@ -46,8 +46,8 @@ updateTaskListItem = (item) ->
   data =
     item:    item.attr('data-item-index')
     checked: if item.prop('checked') then 1 else 0
-    version: container.attr('data-version')
 
+  container.trigger('tasklist:prepareUpdate', data)
   disableTaskList(container)
 
   $.ajax
@@ -59,7 +59,6 @@ updateTaskListItem = (item) ->
       if data.stale
         window.location.reload()
       else
-        container.attr('data-version', data.new_version)
         container.trigger('tasklist:updated', data)
     error: (e) ->
       console.log 'error', e
