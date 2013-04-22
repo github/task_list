@@ -1,3 +1,51 @@
+# TaskList Behavior
+#
+#= provides tasklist:enabled
+#= provides tasklist:disabled
+#= provides tasklist:updateSend
+#= provides tasklist:updateComplete
+#
+#= require jquery
+#= require crema/events/pageupdate
+#= require rails/remote
+#
+# Enables Task List update behavior.
+#
+# ### Expects
+#
+# TaskLists MUST be contained in a `div.js-task-list-container`.
+#
+# TaskList Items SHOULD be an a list (`UL`/`OL`) element.
+#
+# Task list items MUST match `input.task-list-item-checkbox[type=checkbox]`,
+# MUST be `disabled`, and MUST define `data-item-index`. The Item's contents
+# SHOULD be wrapped in a `LABEL` element.
+#
+# TaskLists MUST have a `(form).js-task-list-form` containing a
+# `(textarea).js-task-list-field` form element whose `value` attribute is the
+# source (Markdown) to be udpated. The source MUST follow the syntax guidelines.
+#
+# TaskList updates SHOULD be handled asynchronosly with `data-remote`.
+# See: https://github.com/josh/rails-behaviors
+#
+# jQuery is required and the `$.pageUpdate` behavior MUST be available.
+#
+# ### Events
+#
+# When an update succeeds, a `tasklist:updated' event is triggered, passing
+# along whatever data the request responded with. Handle this event if you
+# need additional behavior.
+#
+# Updating a task list item by clicking on the check box will send an
+# `tasklist:updateSend` event. Following the `ajaxComplete` event,
+# `tasklist:updateComplete` is triggered.
+#
+# ### NOTE
+#
+# Task list checkboxes are rendered as disabled by default because rendered
+# user content is cached without regard for the viewer. We enable checkboxes
+# on `pageUpdate` if the container has a `form.js-task-list-form`.
+
 incomplete = "[ ]"
 complete   = "[x]"
 
@@ -62,40 +110,41 @@ updateTaskListItem = (source, itemIndex, checked) ->
 # because rendered user content is cached without regard
 # for the viewer. Enables the checkboxes and applies the
 # correct list style, if the viewer is able to edit the comment.
-enableTaskList = (comment) ->
-  if comment.find('.js-comment-field').length > 0
-    comment.
+enableTaskList = ($container) ->
+  if $container.find('.js-task-list-form').length > 0
+    $container.
       find('.task-list-item').addClass('enabled').
       find('.task-list-item-checkbox').attr('disabled', null)
-    comment.trigger 'tasklist:enabled'
+    $container.trigger 'tasklist:enabled'
 
-disableTaskList = (comment) ->
-  comment.
+disableTaskList = ($container) ->
+  $container.
     find('.task-list-item').removeClass('enabled').
     find('.task-list-item-checkbox').attr('disabled', 'disabled')
-  comment.trigger 'tasklist:disabled'
+  $container.trigger 'tasklist:disabled'
 
 # Submit updates to task list items asynchronously.
 # Successful updates won't require re-rendering to represent reality.
-updateTaskList = (item) ->
-  comment = item.closest '.js-comment'
-  form    = comment.find 'form.js-comment-update'
-  field   = form.find '.js-comment-field'
-  index   = parseInt item.attr('data-item-index')
-  checked = item.prop 'checked'
+updateTaskList = ($item) ->
+  $container = $item.closest '.js-task-list-container'
+  $form      = $container.find '.js-task-list-form'
+  $field     = $form.find '.js-task-list-field'
+  index      = parseInt $item.attr('data-item-index')
+  checked    = $item.prop 'checked'
 
-  disableTaskList comment
+  disableTaskList $container
 
-  field.val updateTaskListItem(field.val(), index, checked)
-  form.trigger 'tasklist:updateSend', [index, checked]
-  form.one 'ajaxComplete', ->
-    form.trigger 'tasklist:updateComplete'
-  form.submit()
+  $field.val updateTaskListItem($field.val(), index, checked)
+  $form.trigger 'tasklist:updateSend', [index, checked]
+  $form.one 'ajaxComplete', ->
+    enableTaskList $container
+    $form.trigger 'tasklist:updateComplete'
+  $form.submit()
 
 # When the task list item checkbox is updated, submit the change
-$(document).on 'change', 'input.task-list-item-checkbox[type=checkbox]', ->
+$(document).on 'change', '.task-list-item-checkbox', ->
   updateTaskList $(this)
 
 $.pageUpdate ->
-  $('.js-comment').each ->
+  $('.js-task-list-container').each ->
     enableTaskList $(this)
