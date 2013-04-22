@@ -1,75 +1,101 @@
-# Enables Task List update behavior.
-#
-# Expects:
-#
-# A containing `div.js-task-list-container` with these attributes:
-# * `data-task-list-update-url` with the URL to update contained items
-# * `data-version` with the current version of the content
-#
-# Task list items should match `input.task-list-item-checkbox[type=checkbox]`.
-#
-# Events:
-#
-# When an update succeeds, a `tasklist:updated' event is triggered, passing
-# along whatever data the request responded with. Handle this event if you
-# need additional behavior.
-#
-# Setup:
-#
-# Task list checkboxes are rendered as disabled by default because rendered
-# user content is cached without regard for the viewer. We enable checkboxes
-# on `pageUpdate` if the container has the `data-task-list-update-url`
-# attribute set.
+incomplete = "[ ]"
+complete   = "[x]"
 
-enableTaskList = (container) ->
-  if container.attr('data-task-list-update-url').length > 0
-    container.
+# Pattern used to identify all task list items.
+# Useful when you need iterate over all items.
+itemPattern = ///
+  ^
+  (?:\s*[-+*]|(?:\d+\.))? # optional list prefix
+  \s*                     # optional whitespace prefix
+  (                       # checkbox
+    #{complete.  replace(/([\[\]])/g, "\\$1")}|
+    #{incomplete.replace(/([\[\]])/g, "\\$1")}
+  )
+  (?=\s)                  # followed by whitespace
+///
+
+# Used to filter out code fences from the source for comparison only.
+# http://rubular.com/r/x5EwZVrloI
+# Modified slightly due to issues with JS
+codeFencesPattern = ///
+  ^`{3}           # ```
+    (?:\s*\w+)?   # followed by optional language
+    [\S\s]        # whitespace
+  .*              # code
+  [\S\s]          # whitespace
+  ^`{3}$          # ```
+///mg
+
+# Used to filter out potential mismatches (items not in lists).
+# http://rubular.com/r/OInl6CiePy
+itemsInParasPattern = ///
+  ^
+  (
+    #{complete.  replace(/[\[\]]/g, "\\$1")}|
+    #{incomplete.replace(/[\[\]]/g, "\\$1")}
+  )
+  .+
+  $
+///g
+
+# Given the source text, updates the appropriate task list item to match the
+# given checked value.
+#
+# Returns the updated String text.
+updateTaskListItem = (source, itemIndex, checked) ->
+  clean = source.replace(/\r/g, '').replace(codeFencesPattern, '').
+    replace(itemsInParasPattern, '').split("\n")
+  index = 0
+  result = for line in source.split("\n")
+    if line in clean && line.match(itemPattern)
+      index += 1
+      if index == itemIndex
+        line =
+          if checked
+            line.replace(incomplete, complete)
+          else
+            line.replace(complete, incomplete)
+    line
+  result.join("\n")
+
+# Task list checkboxes are rendered as disabled by default
+# because rendered user content is cached without regard
+# for the viewer. Enables the checkboxes and applies the
+# correct list style, if the viewer is able to edit the comment.
+enableTaskList = (comment) ->
+  if comment.find('.js-comment-field').length > 0
+    comment.
       find('.task-list-item').addClass('enabled').
       find('.task-list-item-checkbox').attr('disabled', null)
-    container.trigger('tasklist:enabled')
+    comment.trigger 'tasklist:enabled'
 
-disableTaskList = (container) ->
-  container.
+disableTaskList = (comment) ->
+  comment.
     find('.task-list-item').removeClass('enabled').
     find('.task-list-item-checkbox').attr('disabled', 'disabled')
-  container.trigger('tasklist:disabled')
+  comment.trigger 'tasklist:disabled'
 
 # Submit updates to task list items asynchronously.
 # Successful updates won't require re-rendering to represent reality.
-#
-# If the response from the server includes `stale: true`, we reload the page
-# since the user is trying to update old data. An error should be displayed
-# when the page loads. In Rails, you can use `flash[:error]`.
-updateTaskListItem = (item) ->
-  container = item.closest('.js-task-list-container')
-  url  = container.attr('data-task-list-update-url')
-  data =
-    item:    item.attr('data-item-index')
-    checked: if item.prop('checked') then 1 else 0
+updateTaskList = (item) ->
+  comment = item.closest '.js-comment'
+  form    = comment.find 'form.js-comment-update'
+  field   = form.find '.js-comment-field'
+  index   = parseInt item.attr('data-item-index')
+  checked = item.prop 'checked'
 
-  container.trigger('tasklist:prepareUpdate', data)
-  disableTaskList(container)
+  disableTaskList comment
 
-  $.ajax
-    type: 'post'
-    url: url
-    data: data
-    dataType: 'json'
-    context: container[0]
-    success: (data) ->
-      if data.stale
-        window.location.reload()
-      else
-        container.trigger('tasklist:updated', data)
-    error: (e) ->
-      console.log 'error', e
-    complete: ->
-      enableTaskList(container)
+  field.val updateTaskListItem(field.val(), index, checked)
+  form.trigger 'tasklist:updateSend', [index, checked]
+  form.one 'ajaxComplete', ->
+    form.trigger 'tasklist:updateComplete'
+  form.submit()
 
-# When the task list item checkbox is updated, submit the change.
+# When the task list item checkbox is updated, submit the change
 $(document).on 'change', 'input.task-list-item-checkbox[type=checkbox]', ->
-  updateTaskListItem($(this))
+  updateTaskList $(this)
 
 $.pageUpdate ->
-  $('.js-task-list-container').each ->
-    enableTaskList($(this))
+  $('.js-comment').each ->
+    enableTaskList $(this)
