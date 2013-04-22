@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e 0
+
+bower install jquery
+bower install https://github.com/github/crema.git
+bower install rails-behaviors
+
+bundle install
