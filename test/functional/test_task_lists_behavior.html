@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript" src="/assets/javascripts/task_lists.js"></script>
+  <script type="text/javascript">
+    function logEvent(event) {
+      console.log(event)
+      $('.log').prepend("<li>" + event.type + "</li>")
+    }
+
+    setInterval(function() {
+      if (!$('.log li:first').first().hasClass("timestamp"))
+        $('.log').prepend("<li class='timestamp'><time>" + new Date + "</time></li>")
+    }, 3000)
+
+    $(document).on('ajaxStart', logEvent)
+    $(document).on('ajaxComplete', logEvent)
+
+    $(document).on('tasklist:enabled', logEvent)
+    $(document).on('tasklist:disabled', logEvent)
+    $(document).on('tasklist:updateSend', logEvent)
+    $(document).on('tasklist:updateComplete', logEvent)
+
+    $(document).on('focus', 'input', function(){
+      delay = $(this).attr('data-delay')
+      console.log('throttling input', delay || 'default', this)
+      $(this).on('input', logEvent)
+      $(this).on('throttled:input', {'delay': delay}, logEvent)
+    })
+    $(document).on('blur', 'input', function(){
+      $(this).off('input throttled:input')
+    })
+  </script>
+
+  <style>
+    body {
+      font: 13px Helvetica;
+      padding: 20px;
+    }
+    input {
+      font-size: 20px;
+    }
+    time {
+      font-size: 10px;
+      font-style: oblique;
+    }
+
+    .task-list {
+      list-style-type: none;
+      opacity: 0.75;
+    }
+    .task-list.is-task-list-enabled {
+      opacity: 1.0;
+    }
+
+    .log {
+      position: absolute;
+      top: 20px;
+      right: 50px;
+      color: #222;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="js-task-list-container">
+    <div class="markdown">
+      <ul class="task-list">
+        <li class="task-list-item">
+          <label>
+            <input type="checkbox" class="task-list-item-checkbox" data-item-index="1" disabled />
+            I'm a task list item
+          </label>
+        </li>
+      </ul>
+    </div>
+    <form action="/update" class="js-task-list-form" data-remote data-type="json">
+      <textarea name="comment[body]" class="js-task-list-field">- [ ] I'm a task list item</textarea>
+    </form>
+  </div>
+
+  <ul class="log">
+  </ul>
+</body>
+</html>
