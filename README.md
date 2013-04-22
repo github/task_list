@@ -44,15 +44,13 @@ The following Bower packages are required:
 
 TBD
 
-## Testing
+## Testing and Development
 
-To run the functional tests in the browser, install the necessary components:
+To run the functional tests in the browser, install the necessary components
+with `script/bootstrap`:
 
 ```
-bower install jquery
-bower install https://github.com/github/crema.git
-bower install rails-behavior
-bundle install
+script/bootstrap
 ```
 
 Then run the server:
