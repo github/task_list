@@ -50,7 +50,7 @@ To run the functional tests in the browser, install the necessary components:
 
 ```
 bower install jquery
-bower install https://github.com/github/crema
+bower install https://github.com/github/crema.git
 bower install rails-behavior
 bundle install
 ```
