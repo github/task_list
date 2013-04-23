@@ -2,6 +2,7 @@
 #
 #= provides tasklist:enabled
 #= provides tasklist:disabled
+#= provides tasklist:change
 #= provides tasklist:updateSend
 #= provides tasklist:updateComplete
 #
@@ -11,7 +12,23 @@
 #
 # Enables Task List update behavior.
 #
-# ### Expects
+# ### Example Markup
+#
+#   <div class="js-task-list-container">
+#     <ul class="task-list">
+#       <li class="task-list-item">
+#         <label>
+#           <input type="checkbox" class="js-task-list-item-checkbox" data-item-index="1" disabled />
+#           text
+#         </label>
+#       </li>
+#     </ul>
+#     <form class="js-task-list-form">
+#       <textarea class="js-task-list-field">- [ ] text</textarea>
+#     </form>
+#   </div>
+#
+# ### Specification
 #
 # TaskLists MUST be contained in a `div.js-task-list-container`.
 #
@@ -32,9 +49,7 @@
 #
 # ### Events
 #
-# When an update succeeds, a `tasklist:updated' event is triggered, passing
-# along whatever data the request responded with. Handle this event if you
-# need additional behavior.
+# When the TaskList field has been changed, a `tasklist:change` event is fired.
 #
 # Updating a task list item by clicking on the check box will send an
 # `tasklist:updateSend` event. Following the `ajaxComplete` event,
@@ -135,6 +150,8 @@ updateTaskList = ($item) ->
   disableTaskList $container
 
   $field.val updateTaskListItem($field.val(), index, checked)
+  $field.trigger 'change'
+  $field.trigger 'tasklist:change', [index, checked]
   $form.trigger 'tasklist:updateSend', [index, checked]
   $form.one 'ajaxComplete', ->
     enableTaskList $container
