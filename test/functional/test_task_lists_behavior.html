@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <script type="text/javascript" src="/assets/javascripts/task_lists.js"></script>
+  <script type="text/javascript" src="/assets/task_lists.js"></script>
   <script type="text/javascript">
     function logEvent(event) {
       console.log(event)
@@ -21,16 +21,6 @@
     $(document).on('tasklist:disabled', logEvent)
     $(document).on('tasklist:updateSend', logEvent)
     $(document).on('tasklist:updateComplete', logEvent)
-
-    $(document).on('focus', 'input', function(){
-      delay = $(this).attr('data-delay')
-      console.log('throttling input', delay || 'default', this)
-      $(this).on('input', logEvent)
-      $(this).on('throttled:input', {'delay': delay}, logEvent)
-    })
-    $(document).on('blur', 'input', function(){
-      $(this).off('input throttled:input')
-    })
   </script>
 
   <style>
@@ -48,9 +38,11 @@
 
     .task-list {
       list-style-type: none;
+    }
+    .task-list .task-list-item {
       opacity: 0.75;
     }
-    .task-list.is-task-list-enabled {
+    .task-list .task-list-item.enabled {
       opacity: 1.0;
     }
 
