@@ -60,7 +60,6 @@ class TaskList
         class="task-list-item-checkbox"
         data-item-index="#{item.index}"
         #{'checked="checked"' if item.complete?}
-        data-item-complete="#{item.complete? ? 1 : 0}"
         disabled="disabled"
       />)
     end
