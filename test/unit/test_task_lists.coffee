@@ -64,3 +64,15 @@ asyncTest "doesn't enable task list items when a .js-task-list-field is absent",
   setTimeout ->
     start()
   , 20
+
+asyncTest "disables task list items when changing source", ->
+  expect 1
+
+  $(document).on 'tasklist:disabled', (event) ->
+    ok true
+
+  setTimeout ->
+    start()
+  , 20
+
+  @checkbox.click()
