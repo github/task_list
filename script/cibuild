@@ -1,27 +1,17 @@
-#!/usr/bin/env ruby
+#!/bin/sh -e
+# Usage: script/cibuild
+# CI build script.
+# This is tailored for the janky build machines.
 
-# Use a modern version of Node.
-export PATH="/usr/share/nvm/0.8.11/bin/:$PATH"
+# change into root dir and setup path
+cd $(dirname "$0")/..
+export PATH="$(pwd)/bin:$(pwd)/script:/usr/share/rbenv/shims:/opt/phantomjs/bin:/usr/share/nvm/0.8.11/bin:$PATH"
 
-unless system("./script/bootstrap")
-  warn "Failed bootstrap"
-  exit 1
-end
+# Write commit we're building at
+git log -n 1 || true
+echo
 
-root = File.expand_path("../..", __FILE__)
-Dir.chdir root
+export DISPLAY=:99.0
 
-port = ARGV[0] || 4000
-
-pid = fork do
-  $stderr.reopen "/dev/null" # silence WEBrick output
-  exec 'bundle', 'exec', 'rackup', '-p', port.to_s
-end
-sleep 1
-
-status = system('phantomjs', "#{root}/test/run-qunit.coffee", "http://localhost:#{port}/test/index.html")
-
-Process.kill 'SIGINT', pid
-Process.wait pid
-
-exit status
+./script/bootstrap
+exec ./script/testsuite 4018

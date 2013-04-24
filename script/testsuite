@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+root = File.expand_path("../..", __FILE__)
+Dir.chdir root
+
+port = ARGV[0] || 4000
+
+pid = fork do
+  $stderr.reopen "/dev/null" # silence WEBrick output
+  exec 'bundle', 'exec', 'rackup', '-p', port.to_s
+end
+sleep 1
+
+status = system('phantomjs', "#{root}/test/run-qunit.coffee", "http://localhost:#{port}/test/index.html")
+
+Process.kill 'SIGINT', pid
+Process.wait pid
+
+exit status
