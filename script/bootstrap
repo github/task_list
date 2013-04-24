@@ -1,9 +1,15 @@
 #!/bin/sh
-
 set -e 0
 
-bower install jquery
-bower install https://github.com/github/crema.git
-bower install rails-behaviors
+if ! bundle check 1>/dev/null 2>&1; then
+  bundle install --no-color --binstubs --path vendor/gems "$@"
+fi
 
-bundle install
+if ! npm list bower 2>&1 | grep 0.8.5 >/dev/null; then
+  # npm install bower
+  npm install git://github.com/twitter/bower.git
+fi
+
+bower install --no-color jquery
+bower install --no-color https://github.com/github/crema.git
+bower install --no-color rails-behaviors
