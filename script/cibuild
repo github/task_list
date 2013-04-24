@@ -1,5 +1,10 @@
 #!/usr/bin/env ruby
 
+unless system("./script/bootstrap")
+  warn "Failed bootstrap"
+  exit 1
+end
+
 root = File.expand_path("../..", __FILE__)
 Dir.chdir root
 
