@@ -15,6 +15,18 @@ class TaskListTest < Test::Unit::TestCase
     assert_kind_of TaskList::Summary, summary
   end
 
+  def test_complete_item
+    item = TaskList::Item.new(1, "[x]", "complete")
+    assert item.complete?, "expected to be complete"
+  end
+
+  def test_incomplete_item
+    item = TaskList::Item.new(1, "[ ]", "incomplete")
+    assert !item.complete?, "expected to be incomplete"
+  end
+
+  protected
+
   def task_list(text)
     TaskList.new(Record.new(text))
   end
