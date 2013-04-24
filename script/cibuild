@@ -14,5 +14,5 @@ echo
 export DISPLAY=:99.0
 
 ./script/bootstrap
-exec ./script/testsuite 4018
+./script/testsuite 4018
 rake test
