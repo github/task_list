@@ -32,7 +32,7 @@ module "TaskLists",
   teardown: ->
 
 asyncTest "triggers a tasklist:change event on task list item changes", ->
-  expect 1
+  expect 2
 
   @field.on 'tasklist:change', (event, index, checked) ->
     ok true
