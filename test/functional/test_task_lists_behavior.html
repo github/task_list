@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <script type="text/javascript" src="/assets/task_lists.js"></script>
+  <script type="text/javascript" src="/assets/functional/helpers/remote.js"></script>
   <script type="text/javascript">
     function logEvent(event) {
       console.log(event)
@@ -14,13 +14,18 @@
         $('.log').prepend("<li class='timestamp'><time>" + new Date + "</time></li>")
     }, 3000)
 
-    $(document).on('ajaxStart', logEvent)
-    $(document).on('ajaxComplete', logEvent)
-
     $(document).on('tasklist:enabled', logEvent)
     $(document).on('tasklist:disabled', logEvent)
-    $(document).on('tasklist:updateSend', logEvent)
-    $(document).on('tasklist:updateComplete', logEvent)
+    $(document).on('tasklist:change', '.js-task-list-field', function(event){
+      logEvent(event)
+      $(this).closest('form').submit()
+    })
+
+    $(document).on('ajaxStart', logEvent)
+    $(document).on('ajaxSuccess', '.js-task-list-container', function(event){
+      logEvent(event)
+      $(this).pageUpdate() // reenables the task lists
+    })
   </script>
 
   <style>
@@ -69,7 +74,7 @@
         </li>
       </ul>
     </div>
-    <form action="/update" class="js-task-list-form" data-remote data-type="json">
+    <form action="/update" method="POST" data-remote data-type="json">
       <textarea name="comment[body]" class="js-task-list-field">- [ ] I'm a task list item</textarea>
     </form>
   </div>

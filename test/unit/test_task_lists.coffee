@@ -14,18 +14,13 @@ module "TaskLists",
       disabled: 'disabled'
       "data-item-index": 1
 
-    @form = $ '<form>', class: 'js-task-list-form'
     @field = $ '<textarea>', class: 'js-task-list-field', "- [ ] text"
 
     @item.append @checkbox
     @list.append @item
     @container.append @list
 
-    @form.append @field
-    @container.append @form
-
-    @form.on 'submit', (event) ->
-      event.preventDefault()
+    @container.append @field
 
     $('#qunit-fixture').append(@container).pageUpdate()
 

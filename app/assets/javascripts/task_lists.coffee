@@ -3,12 +3,8 @@
 #= provides tasklist:enabled
 #= provides tasklist:disabled
 #= provides tasklist:change
-#= provides tasklist:updateSend
-#= provides tasklist:updateComplete
 #
-#= require jquery
 #= require crema/events/pageupdate
-#= require rails/remote
 #
 # Enables Task List update behavior.
 #
@@ -23,7 +19,7 @@
 #         </label>
 #       </li>
 #     </ul>
-#     <form class="js-task-list-form">
+#     <form>
 #       <textarea class="js-task-list-field">- [ ] text</textarea>
 #     </form>
 #   </div>
@@ -34,16 +30,15 @@
 #
 # TaskList Items SHOULD be an a list (`UL`/`OL`) element.
 #
-# Task list items MUST match `input.task-list-item-checkbox[type=checkbox]`,
-# MUST be `disabled`, and MUST define `data-item-index`. The Item's contents
-# SHOULD be wrapped in a `LABEL` element.
+# Task list items MUST match `(input).task-list-item-checkbox`, MUST be
+# `disabled` by default and MUST define `data-item-index`. The Item's
+# contents SHOULD be wrapped in a `LABEL` element.
 #
-# TaskLists MUST have a `(form).js-task-list-form` containing a
-# `(textarea).js-task-list-field` form element whose `value` attribute is the
-# source (Markdown) to be udpated. The source MUST follow the syntax guidelines.
+# TaskLists MUST have a `(textarea).js-task-list-field` form element whose
+# `value` attribute is the source (Markdown) to be udpated. The source MUST
+# follow the syntax guidelines.
 #
-# TaskList updates SHOULD be handled asynchronosly with `data-remote`.
-# See: https://github.com/josh/rails-behaviors
+# TaskList updates trigger `tasklist:change` events.
 #
 # jQuery is required and the `$.pageUpdate` behavior MUST be available.
 #
@@ -51,15 +46,11 @@
 #
 # When the TaskList field has been changed, a `tasklist:change` event is fired.
 #
-# Updating a task list item by clicking on the check box will send an
-# `tasklist:updateSend` event. Following the `ajaxComplete` event,
-# `tasklist:updateComplete` is triggered.
-#
 # ### NOTE
 #
 # Task list checkboxes are rendered as disabled by default because rendered
 # user content is cached without regard for the viewer. We enable checkboxes
-# on `pageUpdate` if the container has a `form.js-task-list-form`.
+# on `pageUpdate` if the container has a `(textarea).js-task-list-field`.
 
 incomplete = "[ ]"
 complete   = "[x]"
@@ -121,12 +112,9 @@ updateTaskListItem = (source, itemIndex, checked) ->
     line
   result.join("\n")
 
-# Task list checkboxes are rendered as disabled by default
-# because rendered user content is cached without regard
-# for the viewer. Enables the checkboxes and applies the
-# correct list style, if the viewer is able to edit the comment.
+# Enables task list items to trigger updates.
 enableTaskList = ($container) ->
-  if $container.find('.js-task-list-form').length > 0
+  if $container.find('.js-task-list-field').length > 0
     $container.
       find('.task-list-item').addClass('enabled').
       find('.task-list-item-checkbox').attr('disabled', null)
@@ -138,12 +126,11 @@ disableTaskList = ($container) ->
     find('.task-list-item-checkbox').attr('disabled', 'disabled')
   $container.trigger 'tasklist:disabled'
 
-# Submit updates to task list items asynchronously.
-# Successful updates won't require re-rendering to represent reality.
+# Updates the $field value to reflect the state of $item.
+# Triggers the `tasklist:change` event when the value has changed.
 updateTaskList = ($item) ->
   $container = $item.closest '.js-task-list-container'
-  $form      = $container.find '.js-task-list-form'
-  $field     = $form.find '.js-task-list-field'
+  $field     = $container.find '.js-task-list-field'
   index      = parseInt $item.attr('data-item-index')
   checked    = $item.prop 'checked'
 
@@ -152,15 +139,16 @@ updateTaskList = ($item) ->
   $field.val updateTaskListItem($field.val(), index, checked)
   $field.trigger 'change'
   $field.trigger 'tasklist:change', [index, checked]
-  $form.trigger 'tasklist:updateSend', [index, checked]
-  $form.one 'ajaxComplete', ->
-    enableTaskList $container
-    $form.trigger 'tasklist:updateComplete'
-  $form.submit()
 
 # When the task list item checkbox is updated, submit the change
 $(document).on 'change', '.task-list-item-checkbox', ->
   updateTaskList $(this)
+
+$(document).on 'tasklist:disable', '.js-task-list-container', (event) ->
+  disableTaskList $(this)
+
+$(document).on 'tasklist:enable', '.js-task-list-container', (event) ->
+  enableTaskList $(this)
 
 $.pageUpdate ->
   $('.js-task-list-container').each ->
