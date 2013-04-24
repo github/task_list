@@ -25,6 +25,9 @@ module "TaskLists",
     $('#qunit-fixture').append(@container).pageUpdate()
 
   teardown: ->
+    $(document).off 'tasklist:enabled'
+    $(document).off 'tasklist:disabled'
+    $(document).off 'tasklist:change'
 
 asyncTest "triggers a tasklist:change event on task list item changes", ->
   expect 1
@@ -37,3 +40,27 @@ asyncTest "triggers a tasklist:change event on task list item changes", ->
   , 20
 
   @checkbox.click()
+
+asyncTest "enables task list items when a .js-task-list-field is present", ->
+  expect 1
+
+  $(document).on 'tasklist:enabled', (event) ->
+    ok true
+
+  @container.pageUpdate()
+  setTimeout ->
+    start()
+  , 20
+
+asyncTest "doesn't enable task list items when a .js-task-list-field is absent", ->
+  expect 0
+
+  $(document).on 'tasklist:enabled', (event) ->
+    ok true
+
+  @field.remove()
+
+  @container.pageUpdate()
+  setTimeout ->
+    start()
+  , 20
