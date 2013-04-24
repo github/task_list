@@ -1,6 +1,6 @@
 #= require task_lists
 
-module "TaskLists",
+module "TaskList events",
   setup: ->
     window.linkActivated = false
 
@@ -11,7 +11,8 @@ module "TaskLists",
     @checkbox = $ '<input>',
       type: 'checkbox'
       class: 'task-list-item-checkbox'
-      disabled: 'disabled'
+      disabled: true
+      checked: false
       "data-item-index": 1
 
     @field = $ '<textarea>', class: 'js-task-list-field', "- [ ] text"
