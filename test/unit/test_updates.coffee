@@ -41,9 +41,11 @@ module "TaskList updates",
 
     @completeItem.append @completeCheckbox
     @list.append @completeItem
+    @completeItem.expectedIndex = 1
 
     @incompleteItem.append @incompleteCheckbox
     @list.append @incompleteItem
+    @incompleteItem.expectedIndex = 2
 
     @container.append @list
     @container.append @field
@@ -57,8 +59,8 @@ asyncTest "updates the source, marking the incomplete item as complete", ->
   expect 3
 
   @field.on 'tasklist:change', (event, index, checked) =>
-    equal parseInt(@incompleteCheckbox.attr('data-item-index')), index
     ok checked
+    equal index, @incompleteItem.expectedIndex
     equal @field.val(), @changes.toIncomplete
 
   setTimeout ->
@@ -71,8 +73,8 @@ asyncTest "updates the source, marking the complete item as incomplete", ->
   expect 3
 
   @field.on 'tasklist:change', (event, index, checked) =>
-    equal parseInt(@completeCheckbox.attr('data-item-index')), index
     ok !checked
+    equal index, @completeItem.expectedIndex
     equal @field.val(), @changes.toComplete
 
   setTimeout ->
