@@ -4,8 +4,8 @@ require 'task_list/summary'
 
 class TaskList::SummaryTest < Test::Unit::TestCase
   def setup
-    @complete   = make_item 1, "[x]", "complete"
-    @incomplete = make_item 2, "[ ]", "incomplete"
+    @complete   = make_item "[x]", "complete"
+    @incomplete = make_item "[ ]", "incomplete"
     @items = [@complete, @incomplete]
     @summary = make_summary @items
   end
@@ -30,8 +30,8 @@ class TaskList::SummaryTest < Test::Unit::TestCase
 
   protected
 
-  def make_item(index = 1, checkbox_text = "[ ]", source = "an item!")
-    TaskList::Item.new(index, checkbox_text, source)
+  def make_item(checkbox_text = "[ ]", source = "an item!")
+    TaskList::Item.new(checkbox_text, source)
   end
 
   def make_summary(items)

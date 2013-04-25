@@ -62,18 +62,6 @@ class TaskList
     # Selects first P tag of an LI, if present
     ItemParaSelector = ".//p[1]".freeze
 
-    attr_accessor :index
-
-    def initialize(*)
-      @index = 0
-      super
-    end
-
-    # Private: increments and returns the next item index Integer.
-    def next_index
-      @index += 1
-    end
-
     # List of `TaskList::Item` objects that were recognized in the document.
     # This is available in the result hash as `:task_list_items`.
     #
@@ -82,13 +70,12 @@ class TaskList
       result[:task_list_items] ||= []
     end
 
-    # Renders the item checkbox in a span including the item index and state.
+    # Renders the item checkbox in a span including the item state.
     #
     # Returns an HTML-safe String.
     def render_item_checkbox(item)
       %(<input type="checkbox"
         class="task-list-item-checkbox"
-        data-item-index="#{item.index}"
         #{'checked="checked"' if item.complete?}
         disabled="disabled"
       />)
@@ -137,7 +124,7 @@ class TaskList
             [li, li.inner_html]
           end
         if match = (inner.chomp =~ ItemPattern && $1)
-          item = TaskList::Item.new(next_index, match, inner)
+          item = TaskList::Item.new(match, inner)
           task_list_items << item
 
           add_css_class(li, 'task-list-item')

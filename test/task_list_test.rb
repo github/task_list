@@ -16,12 +16,12 @@ class TaskListTest < Test::Unit::TestCase
   end
 
   def test_complete_item
-    item = TaskList::Item.new(1, "[x]", "complete")
+    item = TaskList::Item.new("[x]", "complete")
     assert item.complete?, "expected to be complete"
   end
 
   def test_incomplete_item
-    item = TaskList::Item.new(1, "[ ]", "incomplete")
+    item = TaskList::Item.new("[ ]", "incomplete")
     assert !item.complete?, "expected to be incomplete"
   end
 

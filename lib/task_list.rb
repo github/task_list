@@ -23,7 +23,7 @@ class TaskList
     @summary ||= TaskList::Summary.new(record.task_list_items)
   end
 
-  class Item < Struct.new(:index, :checkbox_text, :source)
+  class Item < Struct.new(:checkbox_text, :source)
     Complete = "[x]".freeze # see TaskListFilter
     def complete?
       checkbox_text == Complete
