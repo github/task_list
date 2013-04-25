@@ -14,7 +14,7 @@
 #     <ul class="task-list">
 #       <li class="task-list-item">
 #         <label>
-#           <input type="checkbox" class="js-task-list-item-checkbox" data-item-index="1" disabled />
+#           <input type="checkbox" class="js-task-list-item-checkbox" disabled />
 #           text
 #         </label>
 #       </li>
@@ -30,9 +30,8 @@
 #
 # TaskList Items SHOULD be an a list (`UL`/`OL`) element.
 #
-# Task list items MUST match `(input).task-list-item-checkbox`, MUST be
-# `disabled` by default and MUST define `data-item-index`. The Item's
-# contents SHOULD be wrapped in a `LABEL` element.
+# Task list items MUST match `(input).task-list-item-checkbox` and MUST be
+# `disabled` by default. The Item's contents SHOULD be wrapped in a `LABEL`.
 #
 # TaskLists MUST have a `(textarea).js-task-list-field` form element whose
 # `value` attribute is the source (Markdown) to be udpated. The source MUST
@@ -115,9 +114,12 @@ updateTaskListItem = (source, itemIndex, checked) ->
 # Enables task list items to trigger updates.
 enableTaskList = ($container) ->
   if $container.find('.js-task-list-field').length > 0
+    index = 0
     $container.
       find('.task-list-item').addClass('enabled').
       find('.task-list-item-checkbox').attr('disabled', null)
+    for item, i in $container.find('.task-list-item-checkbox')
+      $(item).data('taskListItemIndex', i+1)
     $container.trigger 'tasklist:enabled'
 
 disableTaskList = ($container) ->
@@ -131,7 +133,7 @@ disableTaskList = ($container) ->
 updateTaskList = ($item) ->
   $container = $item.closest '.js-task-list-container'
   $field     = $container.find '.js-task-list-field'
-  index      = parseInt $item.attr('data-item-index')
+  index      = $item.data('taskListItemIndex')
   checked    = $item.prop 'checked'
 
   disableTaskList $container

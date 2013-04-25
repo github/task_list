@@ -13,7 +13,6 @@ module "TaskList events",
       class: 'task-list-item-checkbox'
       disabled: true
       checked: false
-      "data-item-index": 1
 
     @field = $ '<textarea>', class: 'js-task-list-field', "- [ ] text"
 

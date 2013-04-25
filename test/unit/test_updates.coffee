@@ -14,7 +14,6 @@ module "TaskList updates",
       class: 'task-list-item-checkbox'
       disabled: true
       checked: true # yup
-      "data-item-index": 1
 
     @incompleteItem = $ '<li>', class: 'task-list-item'
     @incompleteCheckbox = $ '<input>',
@@ -22,7 +21,6 @@ module "TaskList updates",
       class: 'task-list-item-checkbox'
       disabled: true
       checked: false
-      "data-item-index": 2
 
     @field = $ '<textarea>', class: 'js-task-list-field', text: """
       - [x] complete
