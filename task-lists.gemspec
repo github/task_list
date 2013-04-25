@@ -17,5 +17,10 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency "html-pipeline"
+
   gem.add_development_dependency "rake"
+  gem.add_development_dependency "coffee-script"
+  gem.add_development_dependency "json"
+  gem.add_development_dependency "rack"
+  gem.add_development_dependency "sprockets"
 end

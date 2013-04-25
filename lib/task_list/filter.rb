@@ -23,7 +23,29 @@ class TaskList
   # - [ ] incomplete
   # - [x] complete
   # ```
+  #
+  # Results
+  # -------
+  #
+  # The following keys are written to the result hash:
+  #   :task_list_items - An array of TaskList::Item objects.
   class Filter < HTML::Pipeline::Filter
+
+    Incomplete  = "[ ]".freeze
+    Complete    = "[x]".freeze
+
+    # Pattern used to identify all task list items.
+    # Useful when you need iterate over all items.
+    ItemPattern = /
+      ^
+      (?:\s*[-+*]|(?:\d+\.))? # optional list prefix
+      \s*                     # optional whitespace prefix
+      (                       # checkbox
+        #{Regexp.escape(Complete)}|
+        #{Regexp.escape(Incomplete)}
+      )
+      (?=\s)                  # followed by whitespace
+    /x
 
     ListSelector = [
       # select UL/OL
@@ -40,27 +62,21 @@ class TaskList
     # Selects first P tag of an LI, if present
     ItemParaSelector = ".//p[1]".freeze
 
-    attr_accessor :index
-
-    def initialize(*)
-      @index = 0
-      super
+    # List of `TaskList::Item` objects that were recognized in the document.
+    # This is available in the result hash as `:task_list_items`.
+    #
+    # Returns an Array of TaskList::Item objects.
+    def task_list_items
+      result[:task_list_items] ||= []
     end
 
-    # Private: increments and returns the next item index Integer.
-    def next_index
-      @index += 1
-    end
-
-    # Renders the item checkbox in a span including the item index and state.
+    # Renders the item checkbox in a span including the item state.
     #
     # Returns an HTML-safe String.
     def render_item_checkbox(item)
       %(<input type="checkbox"
         class="task-list-item-checkbox"
-        data-item-index="#{item.index}"
         #{'checked="checked"' if item.complete?}
-        data-item-complete="#{item.complete? ? 1 : 0}"
         disabled="disabled"
       />)
     end
@@ -78,7 +94,7 @@ class TaskList
     def render_task_list_item(item)
       Nokogiri::HTML.fragment <<-html, 'utf-8'
         <label>#{
-          item.source.sub(TaskList::ItemPattern, render_item_checkbox(item))
+          item.source.sub(ItemPattern, render_item_checkbox(item))
         }</label>
       html
     end
@@ -107,8 +123,10 @@ class TaskList
           else
             [li, li.inner_html]
           end
-        if match = TaskList.item?(inner)
-          item = TaskList::Item.new(next_index, match, inner)
+        if match = (inner.chomp =~ ItemPattern && $1)
+          item = TaskList::Item.new(match, inner)
+          task_list_items << item
+
           add_css_class(li, 'task-list-item')
           outer.inner_html = render_task_list_item(item)
         end

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript" src="/assets/functional/helpers/remote.js"></script>
+  <script type="text/javascript">
+    function logEvent(event) {
+      console.log(event)
+      $('.log').prepend("<li>" + event.type + "</li>")
+    }
+
+    setInterval(function() {
+      if (!$('.log li:first').first().hasClass("timestamp"))
+        $('.log').prepend("<li class='timestamp'><time>" + new Date + "</time></li>")
+    }, 3000)
+
+    $(document).on('tasklist:enabled', logEvent)
+    $(document).on('tasklist:disabled', logEvent)
+    $(document).on('tasklist:change', '.js-task-list-field', function(event){
+      logEvent(event)
+      $(this).closest('form').submit()
+    })
+
+    $(document).on('ajaxStart', logEvent)
+    $(document).on('ajaxSuccess', '.js-task-list-container', function(event){
+      logEvent(event)
+      $(this).pageUpdate() // reenables the task lists
+    })
+  </script>
+
+  <style>
+    body {
+      font: 13px Helvetica;
+      padding: 20px;
+    }
+    input {
+      font-size: 20px;
+    }
+    time {
+      font-size: 10px;
+      font-style: oblique;
+    }
+
+    .task-list {
+      list-style-type: none;
+    }
+    .task-list .task-list-item {
+      opacity: 0.75;
+    }
+    .task-list .task-list-item.enabled {
+      opacity: 1.0;
+    }
+
+    .log {
+      position: absolute;
+      top: 20px;
+      right: 50px;
+      color: #222;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="js-task-list-container">
+    <div class="markdown">
+      <ul class="task-list">
+        <li class="task-list-item">
+          <label>
+            <input type="checkbox" class="task-list-item-checkbox" disabled />
+            I'm a task list item
+          </label>
+        </li>
+      </ul>
+    </div>
+    <form action="/update" method="POST" data-remote data-type="json">
+      <textarea name="comment[body]" class="js-task-list-field">- [ ] I'm a task list item</textarea>
+    </form>
+  </div>
+
+  <ul class="log">
+  </ul>
+</body>
+</html>
