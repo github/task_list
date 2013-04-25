@@ -26,11 +26,40 @@ And then execute:
 
 ### Rails 3+: Rails Engine?
 
+TBD
+
 ### Rails 2.3: Manual.
+
+TBD
+
+### CoffeeScript Requirements
+
+The following Bower packages are required:
+
+* jquery
+* https://github.com/github/crema -- `$.pageUpdate`
+* rails-behavior -- `data-remote`
 
 ## Usage
 
-TODO: Write usage instructions here
+TBD
+
+## Testing and Development
+
+To run the functional tests in the browser, install the necessary components
+with `script/bootstrap`:
+
+```
+script/bootstrap
+```
+
+Then run the server:
+
+```
+rackup -p 4011
+```
+
+Navigate to http://localhost:4011/test/functional/test_task_lists_behavior.html
 
 ## Contributing
 

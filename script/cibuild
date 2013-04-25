@@ -1,0 +1,18 @@
+#!/bin/sh -e
+# Usage: script/cibuild
+# CI build script.
+# This is tailored for the janky build machines.
+
+# change into root dir and setup path
+cd $(dirname "$0")/..
+export PATH="$(pwd)/bin:$(pwd)/script:$(pwd)/node_modules/.bin:/usr/share/rbenv/shims:/opt/phantomjs/bin:/usr/share/nvm/0.8.11/bin:$PATH"
+
+# Write commit we're building at
+git log -n 1 || true
+echo
+
+export DISPLAY=:99.0
+
+./script/bootstrap
+./script/testsuite 4018
+rake test

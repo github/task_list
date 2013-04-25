@@ -51,11 +51,9 @@ class TaskList::FilterTest < Test::Unit::TestCase
     incomplete, complete = result[:task_list_items]
 
     assert incomplete
-    assert_equal 1, incomplete.index
     assert !incomplete.complete?
 
     assert complete
-    assert_equal 2, complete.index
     assert complete.complete?
   end
 
