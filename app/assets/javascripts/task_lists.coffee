@@ -114,12 +114,9 @@ updateTaskListItem = (source, itemIndex, checked) ->
 # Enables task list items to trigger updates.
 enableTaskList = ($container) ->
   if $container.find('.js-task-list-field').length > 0
-    index = 0
     $container.
       find('.task-list-item').addClass('enabled').
       find('.task-list-item-checkbox').attr('disabled', null)
-    for item, i in $container.find('.task-list-item-checkbox')
-      $(item).data('taskListItemIndex', i+1)
     $container.trigger 'tasklist:enabled'
 
 disableTaskList = ($container) ->
@@ -133,7 +130,7 @@ disableTaskList = ($container) ->
 updateTaskList = ($item) ->
   $container = $item.closest '.js-task-list-container'
   $field     = $container.find '.js-task-list-field'
-  index      = $item.data('taskListItemIndex')
+  index      = 1 + $container.find('.task-list-item-checkbox').index($item)
   checked    = $item.prop 'checked'
 
   disableTaskList $container
