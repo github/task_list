@@ -5,6 +5,7 @@
 #= provides tasklist:change
 #
 #= require crema/events/pageupdate
+#= require crema/element/has_selection
 #
 # Enables Task List update behavior.
 #
@@ -138,6 +139,27 @@ updateTaskList = ($item) ->
   $field.val updateTaskListItem($field.val(), index, checked)
   $field.trigger 'change'
   $field.trigger 'tasklist:change', [index, checked]
+
+delayChange = undefined
+
+# Prevents the checkbox from changing when the user is making a text selection
+# by clicking and dragging the label text.
+$(document).on 'click', '.task-list-item', (event) ->
+  $checkbox = $(self = this).find('.task-list-item-checkbox')
+  # Delay the change so that we can cancel it if necessary
+  delayChange = setTimeout ->
+    if not $(self).hasSelection()
+      $checkbox.prop('checked', !$checkbox.prop('checked'))
+  , 100
+  # We handle the change ourselves
+  event.stopPropagation()
+  event.preventDefault()
+
+# Prevents the checkbox from changing when the user is making a text selection
+# by double clicking the label text.
+$(document).on 'dblclick', '.task-list-item', (event) ->
+  # Cancels the change if the label contains a selection
+  delayChange = clearTimeout(delayChange) if $(this).hasSelection()
 
 # When the task list item checkbox is updated, submit the change
 $(document).on 'change', '.task-list-item-checkbox', ->
