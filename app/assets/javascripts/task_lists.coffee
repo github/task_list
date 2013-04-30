@@ -151,4 +151,5 @@ $(document).on 'tasklist:enable', '.js-task-list-container', (event) ->
 
 $.pageUpdate ->
   $('.js-task-list-container').each ->
-    enableTaskList $(this)
+    $container = $(@)
+    enableTaskList $container unless $container.hasClass 'js-task-list-disabled'
