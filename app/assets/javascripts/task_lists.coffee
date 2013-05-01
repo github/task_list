@@ -179,8 +179,8 @@ enableTaskList = ($container) ->
       trigger 'tasklist:enabled'
 
 # Enables a collection of TaskList containers.
-$.fn.enableTaskList = ->
-  for container in this
+enableTaskLists = ($containers) ->
+  for container in $containers
     enableTaskList $(container)
 
 # Disable TaskList item changes.
@@ -192,10 +192,19 @@ disableTaskList = ($container) ->
     trigger 'tasklist:disabled'
 
 # Disables a collection of TaskList containers.
-$.fn.disableTaskList = ->
-  for container in this
+disableTaskLists = ($containers) ->
+  for container in $containers
     disableTaskList $(container)
+
+$.fn.taskList = (method) ->
+  $container = $(this).closest('.js-task-list-container')
+
+  methods =
+    enable: enableTaskLists
+    disable: disableTaskLists
+
+  methods[method || 'enable']($container)
 
 # When the page is updated, enable new TaskList containers.
 $.pageUpdate ->
-  $('.js-task-list-container.js-task-list-enable').enableTaskList()
+  $('.js-task-list-container.js-task-list-enable').taskList()
