@@ -2,8 +2,6 @@
 
 module "TaskList updates",
   setup: ->
-    window.linkActivated = false
-
     @container = $ '<div>', class: 'js-task-list-container'
 
     @list = $ '<ul>', class: 'task-list'
@@ -13,7 +11,7 @@ module "TaskList updates",
       type: 'checkbox'
       class: 'task-list-item-checkbox'
       disabled: true
-      checked: true # yup
+      checked: true
 
     @incompleteItem = $ '<li>', class: 'task-list-item'
     @incompleteCheckbox = $ '<input>',
@@ -51,12 +49,12 @@ module "TaskList updates",
     $('#qunit-fixture').append(@container).pageUpdate()
 
   teardown: ->
-    $(document).off 'tasklist:change'
+    $(document).off 'tasklist:changed'
 
 asyncTest "updates the source, marking the incomplete item as complete", ->
   expect 3
 
-  @field.on 'tasklist:change', (event, index, checked) =>
+  @field.on 'tasklist:changed', (event, index, checked) =>
     ok checked
     equal index, @incompleteItem.expectedIndex
     equal @field.val(), @changes.toIncomplete
@@ -70,7 +68,7 @@ asyncTest "updates the source, marking the incomplete item as complete", ->
 asyncTest "updates the source, marking the complete item as incomplete", ->
   expect 3
 
-  @field.on 'tasklist:change', (event, index, checked) =>
+  @field.on 'tasklist:changed', (event, index, checked) =>
     ok !checked
     equal index, @completeItem.expectedIndex
     equal @field.val(), @changes.toComplete

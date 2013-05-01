@@ -14,9 +14,11 @@
         $('.log').prepend("<li class='timestamp'><time>" + new Date + "</time></li>")
     }, 3000)
 
+    $(document).on('tasklist:enable', logEvent)
     $(document).on('tasklist:enabled', logEvent)
     $(document).on('tasklist:disabled', logEvent)
-    $(document).on('tasklist:change', '.js-task-list-field', function(event){
+    $(document).on('tasklist:change', logEvent)
+    $(document).on('tasklist:changed', '.js-task-list-field', function(event){
       logEvent(event)
       $(this).closest('form').submit()
     })

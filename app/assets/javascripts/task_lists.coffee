@@ -5,6 +5,7 @@
 #= provides tasklist:changing
 #= provides tasklist:change
 #
+#= require crema/element/fire
 #= require crema/events/pageupdate
 #
 # Enables Task List update behavior.
@@ -27,7 +28,7 @@
 #
 # ### Specification
 #
-# TaskLists MUST be contained in a `div.js-task-list-container`.
+# TaskLists MUST be contained in a `(div).js-task-list-container`.
 #
 # TaskList Items SHOULD be an a list (`UL`/`OL`) element.
 #
@@ -38,9 +39,10 @@
 # `value` attribute is the source (Markdown) to be udpated. The source MUST
 # follow the syntax guidelines.
 #
-# TaskList updates trigger `tasklist:change` events.
+# TaskList updates trigger `tasklist:change` events. If the change is
+# successful, `tasklist:changed` is fired. The change can be canceled.
 #
-# jQuery is required and the `$.pageUpdate` behavior MUST be available.
+# jQuery and crema are required.
 #
 # ### Events
 #
@@ -112,7 +114,25 @@ updateTaskListItem = (source, itemIndex, checked) ->
     line
   result.join("\n")
 
-# Enables task list items to trigger updates.
+# Updates the $field value to reflect the state of $item.
+# Triggers the `tasklist:change` event before the value has changed, and fires
+# a `tasklist:changed` event once the value has changed.
+updateTaskList = ($item) ->
+  $container = $item.closest '.js-task-list-container'
+  $field     = $container.find '.js-task-list-field'
+  index      = 1 + $container.find('.task-list-item-checkbox').index($item)
+  checked    = $item.prop 'checked'
+
+  $field.fire 'tasklist:change', [index, checked], ->
+    $field.val updateTaskListItem($field.val(), index, checked)
+    $field.trigger 'change'
+    $field.fire 'tasklist:changed', [index, checked]
+
+# When the task list item checkbox is updated, submit the change
+$(document).on 'change', '.task-list-item-checkbox', ->
+  updateTaskList $(this)
+
+# Enables TaskList item changes.
 enableTaskList = ($container) ->
   if $container.find('.js-task-list-field').length > 0
     $container.
@@ -121,6 +141,16 @@ enableTaskList = ($container) ->
     $container.addClass('is-task-list-enabled').
       trigger 'tasklist:enabled'
 
+# Enables a collection of TaskList containers.
+$.fn.enableTaskList = ->
+  for container in this
+    enableTaskList $(container)
+
+# (Re)enable a TaskList container.
+$(document).on 'tasklist:enable', '.js-task-list-container', (event) ->
+  enableTaskList $(this)
+
+# Disable TaskList item changes.
 disableTaskList = ($container) ->
   $container.
     find('.task-list-item').removeClass('enabled').
@@ -128,32 +158,15 @@ disableTaskList = ($container) ->
   $container.removeClass('is-task-list-enabled').
     trigger 'tasklist:disabled'
 
-# Updates the $field value to reflect the state of $item.
-# Triggers the `tasklist:change` event when the value has changed.
-updateTaskList = ($item) ->
-  $container = $item.closest '.js-task-list-container'
-  $field     = $container.find '.js-task-list-field'
-  index      = 1 + $container.find('.task-list-item-checkbox').index($item)
-  checked    = $item.prop 'checked'
-
-  $container.trigger 'tasklist:changing', [index, checked]
-  $field.val updateTaskListItem($field.val(), index, checked)
-  $field.trigger 'change'
-  $field.trigger 'tasklist:change', [index, checked]
-
-# When the task list item checkbox is updated, submit the change
-$(document).on 'change', '.task-list-item-checkbox', ->
-  updateTaskList $(this)
+# Disables a collection of TaskList containers.
+$.fn.disableTaskList = ->
+  for container in this
+    disableTaskList $(container)
 
 # Disable a TaskList container.
 $(document).on 'tasklist:disable', '.js-task-list-container', (event) ->
   disableTaskList $(this)
 
-# (Re)enable a TaskList container.
-$(document).on 'tasklist:enable', '.js-task-list-container', (event) ->
-  enableTaskList $(this)
-
 # When the page is updated, enable new TaskList containers.
 $.pageUpdate ->
-  $('.js-task-list-container').each ->
-    enableTaskList $(this)
+  $('.js-task-list-container').enableTaskList()
