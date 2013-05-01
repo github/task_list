@@ -2,8 +2,8 @@
 #
 #= provides tasklist:enabled
 #= provides tasklist:disabled
-#= provides tasklist:changing
 #= provides tasklist:change
+#= provides tasklist:changed
 #
 #= require crema/element/fire
 #= require crema/events/pageupdate
@@ -46,7 +46,41 @@
 #
 # ### Events
 #
-# When the TaskList field has been changed, a `tasklist:change` event is fired.
+# `tasklist:enabled`
+#
+# Fired when the TaskList is enabled.
+#
+# * **Synchronicity** Sync
+# * **Bubbles** Yes
+# * **Cancelable** No
+# * **Target** `.js-task-list-container`
+#
+# `tasklist:disabled`
+#
+# Fired when the TaskList is disabled.
+#
+# * **Synchronicity** Sync
+# * **Bubbles** Yes
+# * **Cancelable** No
+# * **Target** `.js-task-list-container`
+#
+# `tasklist:change`
+#
+# Fired before the TaskList item change takes affect.
+#
+# * **Synchronicity** Sync
+# * **Bubbles** Yes
+# * **Cancelable** Yes
+# * **Target** `.js-task-list-field`
+#
+# `tasklist:changed`
+#
+# Fired once the TaskList item change has taken affect.
+#
+# * **Synchronicity** Sync
+# * **Bubbles** Yes
+# * **Cancelable** No
+# * **Target** `.js-task-list-field`
 #
 # ### NOTE
 #
