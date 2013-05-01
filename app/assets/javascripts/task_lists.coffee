@@ -44,7 +44,17 @@
 #
 # jQuery and crema are required.
 #
-# ### Events
+# ### Methods
+#
+# `.taskList('enable')` or `.taskList()`
+#
+# Enables TaskList updates for the container.
+#
+# `.taskList('disable')`
+#
+# Disables TaskList updates for the container.
+#
+## ### Events
 #
 # `tasklist:enabled`
 #
