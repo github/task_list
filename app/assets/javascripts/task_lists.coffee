@@ -180,10 +180,6 @@ $.fn.enableTaskList = ->
   for container in this
     enableTaskList $(container)
 
-# (Re)enable a TaskList container.
-$(document).on 'tasklist:enable', '.js-task-list-container', (event) ->
-  enableTaskList $(this)
-
 # Disable TaskList item changes.
 disableTaskList = ($container) ->
   $container.
@@ -196,10 +192,6 @@ disableTaskList = ($container) ->
 $.fn.disableTaskList = ->
   for container in this
     disableTaskList $(container)
-
-# Disable a TaskList container.
-$(document).on 'tasklist:disable', '.js-task-list-container', (event) ->
-  disableTaskList $(this)
 
 # When the page is updated, enable new TaskList containers.
 $.pageUpdate ->
