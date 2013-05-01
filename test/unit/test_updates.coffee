@@ -46,7 +46,8 @@ module "TaskList updates",
     @container.append @list
     @container.append @field
 
-    $('#qunit-fixture').append(@container).pageUpdate()
+    $('#qunit-fixture').append(@container)
+    @container.enableTaskList()
 
   teardown: ->
     $(document).off 'tasklist:changed'

@@ -20,7 +20,8 @@ module "TaskList events",
 
     @container.append @field
 
-    $('#qunit-fixture').append(@container).pageUpdate()
+    $('#qunit-fixture').append(@container)
+    @container.enableTaskList()
 
   teardown: ->
     $(document).off 'tasklist:enabled'
@@ -76,7 +77,7 @@ asyncTest "enables task list items when a .js-task-list-field is present", ->
   $(document).on 'tasklist:enabled', (event) ->
     ok true
 
-  @container.pageUpdate()
+  @container.enableTaskList()
   setTimeout ->
     start()
   , 20
@@ -89,7 +90,7 @@ asyncTest "doesn't enable task list items when a .js-task-list-field is absent",
 
   @field.remove()
 
-  @container.pageUpdate()
+  @container.enableTaskList()
   setTimeout ->
     start()
   , 20

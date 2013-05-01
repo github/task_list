@@ -87,6 +87,9 @@
 # Task list checkboxes are rendered as disabled by default because rendered
 # user content is cached without regard for the viewer. We enable checkboxes
 # on `pageUpdate` if the container has a `(textarea).js-task-list-field`.
+#
+# To automatically enable TaskLists, add the `js-task-list-enable` class to the
+# `js-task-list-container`.
 
 incomplete = "[ ]"
 complete   = "[x]"
@@ -195,4 +198,4 @@ $.fn.disableTaskList = ->
 
 # When the page is updated, enable new TaskList containers.
 $.pageUpdate ->
-  $('.js-task-list-container').enableTaskList()
+  $('.js-task-list-container.js-task-list-enable').enableTaskList()
