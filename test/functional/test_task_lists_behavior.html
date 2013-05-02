@@ -18,13 +18,17 @@
     $(document).on('tasklist:disabled', logEvent)
     $(document).on('tasklist:change', '.js-task-list-field', function(event){
       logEvent(event)
+      $(this).closest('.js-task-list-container').taskList('disable')
+    })
+    $(document).on('tasklist:changed', '.js-task-list-field', function(event){
+      logEvent(event)
       $(this).closest('form').submit()
     })
 
     $(document).on('ajaxStart', logEvent)
     $(document).on('ajaxSuccess', '.js-task-list-container', function(event){
       logEvent(event)
-      $(this).pageUpdate() // reenables the task lists
+      $(this).taskList()
     })
   </script>
 
@@ -63,7 +67,7 @@
   </style>
 </head>
 <body>
-  <div class="js-task-list-container">
+  <div class="js-task-list-container js-task-list-enable">
     <div class="markdown">
       <ul class="task-list">
         <li class="task-list-item">
