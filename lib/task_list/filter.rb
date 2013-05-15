@@ -92,11 +92,8 @@ class TaskList
     #
     # Returns the marked up task list item Nokogiri::XML::NodeSet object.
     def render_task_list_item(item)
-      Nokogiri::HTML.fragment <<-html, 'utf-8'
-        <label>#{
-          item.source.sub(ItemPattern, render_item_checkbox(item))
-        }</label>
-      html
+      Nokogiri::HTML.fragment \
+        item.source.sub(ItemPattern, render_item_checkbox(item)), 'utf-8'
     end
 
     # Public: Select all task lists from the `doc`.
