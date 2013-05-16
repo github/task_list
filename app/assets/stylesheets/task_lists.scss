@@ -10,9 +10,6 @@
 .task-list-item label {
   font-weight: normal;
 }
-.task-list-item.enabled label {
-  cursor: pointer;
-}
 .task-list-item + .task-list-item {
   margin-top: 3px;
 }

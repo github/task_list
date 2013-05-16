@@ -15,10 +15,8 @@
 #   <div class="js-task-list-container">
 #     <ul class="task-list">
 #       <li class="task-list-item">
-#         <label>
-#           <input type="checkbox" class="js-task-list-item-checkbox" disabled />
-#           text
-#         </label>
+#         <input type="checkbox" class="js-task-list-item-checkbox" disabled />
+#         text
 #       </li>
 #     </ul>
 #     <form>
@@ -33,7 +31,7 @@
 # TaskList Items SHOULD be an a list (`UL`/`OL`) element.
 #
 # Task list items MUST match `(input).task-list-item-checkbox` and MUST be
-# `disabled` by default. The Item's contents SHOULD be wrapped in a `LABEL`.
+# `disabled` by default.
 #
 # TaskLists MUST have a `(textarea).js-task-list-field` form element whose
 # `value` attribute is the source (Markdown) to be udpated. The source MUST
