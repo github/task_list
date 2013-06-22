@@ -1,0 +1,17 @@
+{
+  name: "task-lists",
+  version: "0.1.1",
+  dependencies: {
+    crema: ">= 0.10.4",
+    qunit: ">= 1.0"
+  },
+  ignore: [
+  "lib/",
+  "script/",
+  "test/",
+  "vendor/",
+  ".gitignore",
+  "Gemfile",
+  "config.ru"
+  ]
+}
