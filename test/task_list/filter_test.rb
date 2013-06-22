@@ -78,6 +78,15 @@ class TaskList::FilterTest < Test::Unit::TestCase
     assert_equal unicode, item.text.strip
   end
 
+  def test_handles_nested_items
+    text = <<-md
+- [ ] one
+  - [ ] one.one
+    md
+    puts filter(text)[:output].to_s
+    assert item = filter(text)[:output].css('.task-list-item .task-list-item').pop
+  end
+
   protected
 
   def filter(input, context = @context, result = nil)
