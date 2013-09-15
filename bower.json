@@ -1,0 +1,23 @@
+{
+  "name": "task-lists",
+  "version": "0.1.1",
+  "dependencies": {
+    "jquery": ">= 1.9.1",
+    "crema": ">= 0.10.6",
+    "qunit": ">= 1.0"
+  },
+  "ignore": [
+    "lib/",
+    "script/",
+    "test/",
+    "vendor/",
+    ".gitignore",
+    "Gemfile",
+    "Rakefile",
+    "config.ru",
+    "task-lists.gemspec",
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ]
+}
