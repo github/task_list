@@ -5,7 +5,7 @@
 #= provides tasklist:change
 #= provides tasklist:changed
 #
-#= require crema/element/fire
+#= require crema/events/fire
 #= require crema/events/pageupdate
 #
 # Enables Task List update behavior.
