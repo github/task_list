@@ -1,2 +1,2 @@
-#= require qunit/qunit/qunit
+#= require qunit
 #= require_directory ./unit
