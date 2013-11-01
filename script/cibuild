@@ -19,4 +19,4 @@ export DISPLAY=:99.0
 
 ./script/bootstrap
 ./script/testsuite 4018
-rake test
+bundle exec rake test
