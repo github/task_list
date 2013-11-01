@@ -2,7 +2,7 @@
   "name": "task-lists",
   "dependencies": {
     "jquery": ">= 1.9.1",
-    "crema": "https://github.com/github/crema.git",
+    "crema": "git@github.com/github/crema.git",
     "qunit": ">= 1.0"
   }
 }
