@@ -7,7 +7,7 @@ require 'sprockets'
 Root = File.expand_path("..", __FILE__)
 
 Assets = Sprockets::Environment.new(Root) do |env|
-  env.append_path "components" # bower
+  env.append_path "bower_components"
   env.append_path "app/assets/javascripts"
   env.append_path "app/assets/stylesheets"
   env.append_path "test"
