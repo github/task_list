@@ -213,6 +213,6 @@ $.fn.taskList = (method) ->
 
   methods[method || 'enable']($container)
 
-$.observe '.js-task-list-container'
+$.observe '.js-task-list-container',
   add:    -> $(this).taskList('enable')
   remove: -> $(this).taskList('disable')
