@@ -6,7 +6,6 @@
 #= provides tasklist:changed
 #
 #= require crema/events/fire
-#= require crema/events/pageupdate
 #
 # Enables Task List update behavior.
 #
@@ -93,12 +92,8 @@
 # ### NOTE
 #
 # Task list checkboxes are rendered as disabled by default because rendered
-# user content is cached without regard for the viewer. We enable checkboxes
-# on `pageUpdate` if the container has a `(textarea).js-task-list-field`.
+# user content is cached without regard for the viewer.
 #
-# To automatically enable TaskLists, add the `js-task-list-enable` class to the
-# `js-task-list-container`.
-
 incomplete = "[ ]"
 complete   = "[x]"
 
@@ -212,7 +207,3 @@ $.fn.taskList = (method) ->
     disable: disableTaskLists
 
   methods[method || 'enable']($container)
-
-# When the page is updated, enable new TaskList containers.
-$.pageUpdate ->
-  $('.js-task-list-container.js-task-list-enable').taskList()

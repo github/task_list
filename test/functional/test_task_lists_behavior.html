@@ -16,9 +16,9 @@
 
     $(document).on('tasklist:enabled', logEvent)
     $(document).on('tasklist:disabled', logEvent)
-    $(document).on('tasklist:change', '.js-task-list-field', function(event){
+    $(document).on('tasklist:change', '.js-task-list-container', function(event){
       logEvent(event)
-      $(this).closest('.js-task-list-container').taskList('disable')
+      $(this).addClass('is-updating-task-list')
     })
     $(document).on('tasklist:changed', '.js-task-list-field', function(event){
       logEvent(event)
@@ -28,8 +28,13 @@
     $(document).on('ajaxStart', logEvent)
     $(document).on('ajaxSuccess', '.js-task-list-container', function(event){
       logEvent(event)
-      $(this).taskList()
+      $(this).removeClass('is-updating-task-list')
     })
+
+    $.observe('.js-task-list-container:not(.is-updating-task-list)', {
+      add:    function(){ $(this).taskList('enable') },
+      remove: function(){ $(this).taskList('disable') }
+    });
   </script>
 
   <style>

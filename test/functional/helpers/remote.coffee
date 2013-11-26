@@ -1,3 +1,4 @@
 #= require jquery
-#= require rails/remote
+#= require rails-behaviors/remote
+#= require crema/utils/observe
 #= require task_lists
