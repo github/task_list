@@ -6,7 +6,7 @@
 #= provides tasklist:changed
 #
 #= require crema/events/fire
-#= require crema/events/pageupdate
+#= require crema/utils/observe
 #
 # Enables Task List update behavior.
 #
@@ -213,6 +213,6 @@ $.fn.taskList = (method) ->
 
   methods[method || 'enable']($container)
 
-# When the page is updated, enable new TaskList containers.
-$.pageUpdate ->
-  $('.js-task-list-container.js-task-list-enable').taskList()
+$.observe '.js-task-list-container'
+  add:    -> $(this).taskList('enable')
+  remove: -> $(this).taskList('disable')
