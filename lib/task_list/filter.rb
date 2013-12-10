@@ -31,8 +31,9 @@ class TaskList
   #   :task_list_items - An array of TaskList::Item objects.
   class Filter < HTML::Pipeline::Filter
 
-    Incomplete  = "[ ]".freeze
-    Complete    = "[x]".freeze
+    Incomplete     = "[ ]".freeze
+    IncompleteNBSP = "[\xC2\xA0]".freeze
+    Complete       = "[x]".freeze
 
     # Pattern used to identify all task list items.
     # Useful when you need iterate over all items.
@@ -42,7 +43,8 @@ class TaskList
       \s*                     # optional whitespace prefix
       (                       # checkbox
         #{Regexp.escape(Complete)}|
-        #{Regexp.escape(Incomplete)}
+        #{Regexp.escape(Incomplete)}|
+        #{Regexp.escape(IncompleteNBSP)}
       )
       (?=\s)                  # followed by whitespace
     /x
@@ -51,9 +53,11 @@ class TaskList
       # select UL/OL
       ".//li[starts-with(text(),'[ ]')]/..",
       ".//li[starts-with(text(),'[x]')]/..",
+      ".//li[starts-with(text(),'[\xC2\xA0]')]/..",
       # and those wrapped in Ps
       ".//li/p[1][starts-with(text(),'[ ]')]/../..",
-      ".//li/p[1][starts-with(text(),'[x]')]/../.."
+      ".//li/p[1][starts-with(text(),'[x]')]/../..",
+      ".//li/p[1][starts-with(text(),'[\xC2\xA0]')]/../.."
     ].join(' | ').freeze
 
     # Selects all LIs from a TaskList UL/OL

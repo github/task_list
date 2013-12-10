@@ -78,6 +78,14 @@ class TaskList::FilterTest < Test::Unit::TestCase
     assert_equal unicode, item.text.strip
   end
 
+  # NOTE: This is an edge case experienced regularly by users using a Swiss
+  # German keyboard.
+  def test_non_breaking_space_between_brackets
+    text = "- [\xC2\xA0] ok"
+    assert item = filter(text)[:output].css('.task-list-item').pop, "item expected"
+    assert_equal 'ok', item.text.strip
+  end
+
   protected
 
   def filter(input, context = @context, result = nil)
