@@ -20,19 +20,34 @@ module "TaskList updates",
       disabled: true
       checked: false
 
+    @incompleteNBSPItem = $ '<li>', class: 'task-list-item'
+    @incompleteNBSPCheckbox = $ '<input>',
+      type: 'checkbox'
+      class: 'task-list-item-checkbox'
+      disabled: true
+      checked: false
+
     @field = $ '<textarea>', class: 'js-task-list-field', text: """
       - [x] complete
       - [ ] incomplete
+      - [\xC2\xA0] incompleteNBSP
     """
 
     @changes =
       toComplete: """
       - [ ] complete
       - [ ] incomplete
+      - [\xC2\xA0] incompleteNBSP
       """
       toIncomplete: """
       - [x] complete
       - [x] incomplete
+      - [\xC2\xA0] incompleteNBSP
+      """
+      toIncompleteNBSP: """
+      - [x] complete
+      - [ ] incomplete
+      - [x] incompleteNBSP
       """
 
     @completeItem.append @completeCheckbox
@@ -42,6 +57,10 @@ module "TaskList updates",
     @incompleteItem.append @incompleteCheckbox
     @list.append @incompleteItem
     @incompleteItem.expectedIndex = 2
+
+    @incompleteNBSPItem.append @incompleteNBSPCheckbox
+    @list.append @incompleteNBSPItem
+    @incompleteNBSPItem.expectedIndex = 3
 
     @container.append @list
     @container.append @field
@@ -79,3 +98,17 @@ asyncTest "updates the source, marking the complete item as incomplete", ->
   , 20
 
   @completeCheckbox.click()
+
+asyncTest "updates the source for items with non-breaking spaces", ->
+  expect 3
+
+  @field.on 'tasklist:changed', (event, index, checked) =>
+    ok checked
+    equal index, @incompleteNBSPItem.expectedIndex
+    equal @field.val(), @changes.toIncompleteNBSP
+
+  setTimeout ->
+    start()
+  , 20
+
+  @incompleteNBSPCheckbox.click()

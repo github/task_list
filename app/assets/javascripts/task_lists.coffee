@@ -99,8 +99,12 @@
 # To automatically enable TaskLists, add the `js-task-list-enable` class to the
 # `js-task-list-container`.
 
-incomplete = "[ ]"
-complete   = "[x]"
+incomplete     = "[ ]"
+incompleteNBSP = "[\xC2\xA0]"
+complete       = "[x]"
+
+escape = (str) ->
+  str.replace(/([\[\]])/g, "\\$1")
 
 # Pattern used to identify all task list items.
 # Useful when you need iterate over all items.
@@ -109,8 +113,9 @@ itemPattern = ///
   (?:\s*[-+*]|(?:\d+\.))? # optional list prefix
   \s*                     # optional whitespace prefix
   (                       # checkbox
-    #{complete.  replace(/([\[\]])/g, "\\$1")}|
-    #{incomplete.replace(/([\[\]])/g, "\\$1")}
+    #{escape(complete)}|
+    #{escape(incomplete)}|
+    #{escape(incompleteNBSP)}
   )
   (?=\s)                  # followed by whitespace
 ///
@@ -132,8 +137,9 @@ codeFencesPattern = ///
 itemsInParasPattern = ///
   ^
   (
-    #{complete.  replace(/[\[\]]/g, "\\$1")}|
-    #{incomplete.replace(/[\[\]]/g, "\\$1")}
+    #{escape(complete)}|
+    #{escape(incomplete)}|
+    #{escape(incompleteNBSP)}
   )
   .+
   $
@@ -153,7 +159,7 @@ updateTaskListItem = (source, itemIndex, checked) ->
       if index == itemIndex
         line =
           if checked
-            line.replace(incomplete, complete)
+            line.replace(incomplete, complete).replace(incompleteNBSP, complete)
           else
             line.replace(complete, incomplete)
     line
