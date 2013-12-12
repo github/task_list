@@ -99,12 +99,21 @@
 # To automatically enable TaskLists, add the `js-task-list-enable` class to the
 # `js-task-list-container`.
 
-incomplete     = "[ ]"
-incompleteNBSP = "[\xC2\xA0]"
-complete       = "[x]"
+incomplete = "[ ]"
+complete   = "[x]"
 
-escape = (str) ->
-  str.replace(/([\[\]])/g, "\\$1")
+# Escapes the String for regular expression matching.
+escapePattern = (str) ->
+  str.
+    replace(/([\[\]])/g, "\\$1"). # escape square brackets
+    replace(/\s/, "\\s")          # match all white space
+
+incompletePattern = ///
+  #{escapePattern(incomplete)}
+///
+completePattern = ///
+  #{escapePattern(complete)}
+///
 
 # Pattern used to identify all task list items.
 # Useful when you need iterate over all items.
@@ -113,9 +122,8 @@ itemPattern = ///
   (?:\s*[-+*]|(?:\d+\.))? # optional list prefix
   \s*                     # optional whitespace prefix
   (                       # checkbox
-    #{escape(complete)}|
-    #{escape(incomplete)}|
-    #{escape(incompleteNBSP)}
+    #{escapePattern(complete)}|
+    #{escapePattern(incomplete)}
   )
   (?=\s)                  # followed by whitespace
 ///
@@ -137,9 +145,8 @@ codeFencesPattern = ///
 itemsInParasPattern = ///
   ^
   (
-    #{escape(complete)}|
-    #{escape(incomplete)}|
-    #{escape(incompleteNBSP)}
+    #{escapePattern(complete)}|
+    #{escapePattern(incomplete)}
   )
   .+
   $
@@ -159,9 +166,9 @@ updateTaskListItem = (source, itemIndex, checked) ->
       if index == itemIndex
         line =
           if checked
-            line.replace(incomplete, complete).replace(incompleteNBSP, complete)
+            line.replace(incompletePattern, complete)
           else
-            line.replace(complete, incomplete)
+            line.replace(completePattern, incomplete)
     line
   result.join("\n")
 
