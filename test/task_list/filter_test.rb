@@ -2,7 +2,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 require 'task_list/filter'
 
-class TaskList::FilterTest < Test::Unit::TestCase
+class TaskList::FilterTest < Minitest::Test
   def setup
     @pipeline = HTML::Pipeline.new [
       HTML::Pipeline::MarkdownFilter,
