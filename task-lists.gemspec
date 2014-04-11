@@ -24,5 +24,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "json"
   gem.add_development_dependency "rack"
   gem.add_development_dependency "sprockets"
-  gem.add_development_dependency "minitest"
+  gem.add_development_dependency "minitest", "~> 5.3.2"
 end
