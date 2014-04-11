@@ -5,7 +5,6 @@
 #= provides tasklist:change
 #= provides tasklist:changed
 #
-#= require crema/events/fire
 #= require crema/events/pageupdate
 #
 # Enables Task List update behavior.
@@ -168,10 +167,13 @@ updateTaskList = ($item) ->
   index      = 1 + $container.find('.task-list-item-checkbox').index($item)
   checked    = $item.prop 'checked'
 
-  $field.fire 'tasklist:change', [index, checked], ->
+  event = $.Event 'tasklist:change'
+  $field.trigger event, [index, checked]
+
+  unless event.isDefaultPrevented()
     $field.val updateTaskListItem($field.val(), index, checked)
     $field.trigger 'change'
-    $field.fire 'tasklist:changed', [index, checked]
+    $field.trigger 'tasklist:changed', [index, checked]
 
 # When the task list item checkbox is updated, submit the change
 $(document).on 'change', '.task-list-item-checkbox', ->

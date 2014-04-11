@@ -1,3 +1,3 @@
 #= require jquery
-#= require rails/remote
+#= require rails-behaviors/remote
 #= require task_lists

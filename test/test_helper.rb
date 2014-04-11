@@ -1,3 +1,3 @@
 $:.unshift "lib"
-require 'test/unit'
+require 'minitest/autorun'
 require 'task_list'
