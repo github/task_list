@@ -9,7 +9,7 @@ into your GitHub-flavored-Markdown user content.
 The Task List feature is actually made of several different components:
 
 * GitHub-flavored-Markdown Filter
-* Model: summarizes and task list items
+* Model: summarizes task list items
 * JavaScript: task list update behavior
 * CSS: styles Markdown task list items
 
