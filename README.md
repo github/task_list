@@ -35,10 +35,12 @@ require 'task_list/railtie'
 Wherever you have your Sprockets setup:
 
 ``` ruby
-# Load TaskList assets
-require 'task_list/railtie'
-TaskList.asset_paths.each do |path|
-  env.append_path path
+Sprockets::Environment.new(Rails.root) do |env|
+  # Load TaskList assets
+  require 'task_list/railtie'
+  TaskList.asset_paths.each do |path|
+    env.append_path path
+  end
 end
 ```
 
