@@ -18,9 +18,11 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "html-pipeline"
 
+  gem.add_development_dependency "github-markdown"
   gem.add_development_dependency "rake"
   gem.add_development_dependency "coffee-script"
   gem.add_development_dependency "json"
   gem.add_development_dependency "rack"
   gem.add_development_dependency "sprockets"
+  gem.add_development_dependency "minitest", "~> 5.3.2"
 end

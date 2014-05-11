@@ -3,7 +3,7 @@ require File.expand_path('../test_helper', __FILE__)
 require 'task_list'
 require 'task_list/filter'
 
-class TaskListTest < Test::Unit::TestCase
+class TaskListTest < Minitest::Test
   class Record < Struct.new(:body)
     def task_list_items
       []

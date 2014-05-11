@@ -2,7 +2,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 require 'task_list/summary'
 
-class TaskList::SummaryTest < Test::Unit::TestCase
+class TaskList::SummaryTest < Minitest::Test
   def setup
     @complete   = make_item "[x]", "complete"
     @incomplete = make_item "[ ]", "incomplete"
