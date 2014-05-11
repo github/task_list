@@ -113,7 +113,7 @@ class TaskList
     def filter_list(node)
       add_css_class(node, 'task-list')
 
-      node.xpath(ItemSelector).each do |li|
+      node.xpath(ItemSelector).reverse.each do |li|
         outer, inner =
           if p = li.xpath(ItemParaSelector)[0]
             [p, p.inner_html]
@@ -122,7 +122,8 @@ class TaskList
           end
         if match = (inner.chomp =~ ItemPattern && $1)
           item = TaskList::Item.new(match, inner)
-          task_list_items << item
+          # prepend because we're iterating in reverse
+          task_list_items.unshift item
 
           add_css_class(li, 'task-list-item')
           outer.inner_html = render_task_list_item(item)
