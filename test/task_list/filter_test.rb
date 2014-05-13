@@ -2,7 +2,7 @@
 require File.expand_path('../../test_helper', __FILE__)
 require 'task_list/filter'
 
-class TaskList::FilterTest < Test::Unit::TestCase
+class TaskList::FilterTest < Minitest::Test
   def setup
     @pipeline = HTML::Pipeline.new [
       HTML::Pipeline::MarkdownFilter,
@@ -76,6 +76,33 @@ class TaskList::FilterTest < Test::Unit::TestCase
     md
     assert item = filter(text)[:output].css('.task-list-item').pop
     assert_equal unicode, item.text.strip
+  end
+
+  def test_handles_nested_items
+    text = <<-md
+- [ ] one
+  - [ ] one.one
+    md
+    assert item = filter(text)[:output].css('.task-list-item .task-list-item').pop
+  end
+
+  def test_handles_complicated_nested_items
+    text = <<-md
+- [ ] one
+  - [ ] one.one
+  - [x] one.two
+    - [ ] one.two.one
+    - [ ] one.two.two
+  - [ ] one.three
+  - [ ] one.four
+- [ ] two
+  - [x] two.one
+  - [ ] two.two
+- [ ] three
+    md
+
+    assert_equal 6 + 2, filter(text)[:output].css('.task-list-item .task-list-item').size
+    assert_equal 2, filter(text)[:output].css('.task-list-item .task-list-item .task-list-item').size
   end
 
   # NOTE: This is an edge case experienced regularly by users using a Swiss
