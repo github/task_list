@@ -100,6 +100,7 @@ class TaskList::FilterTest < Minitest::Test
   - [ ] two.two
 - [ ] three
     md
+
     assert_equal 6 + 2, filter(text)[:output].css('.task-list-item .task-list-item').size
     assert_equal 2, filter(text)[:output].css('.task-list-item .task-list-item .task-list-item').size
   end
