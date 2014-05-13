@@ -31,8 +31,11 @@ class TaskList
   #   :task_list_items - An array of TaskList::Item objects.
   class Filter < HTML::Pipeline::Filter
 
-    Incomplete  = "[ ]".freeze
-    Complete    = "[x]".freeze
+    Incomplete = "[ ]".freeze
+    Complete   = "[x]".freeze
+
+    IncompletePattern = /\[[[:space:]]\]/.freeze # matches all whitespace
+    CompletePattern   = Regexp.escape(Complete).freeze
 
     # Pattern used to identify all task list items.
     # Useful when you need iterate over all items.
@@ -41,8 +44,8 @@ class TaskList
       (?:\s*[-+*]|(?:\d+\.))? # optional list prefix
       \s*                     # optional whitespace prefix
       (                       # checkbox
-        #{Regexp.escape(Complete)}|
-        #{Regexp.escape(Incomplete)}
+        #{CompletePattern}|
+        #{IncompletePattern}
       )
       (?=\s)                  # followed by whitespace
     /x

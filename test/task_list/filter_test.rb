@@ -105,6 +105,26 @@ class TaskList::FilterTest < Minitest::Test
     assert_equal 2, filter(text)[:output].css('.task-list-item .task-list-item .task-list-item').size
   end
 
+  # NOTE: This is an edge case experienced regularly by users using a Swiss
+  # German keyboard.
+  # See: https://github.com/github/github/pull/18362
+  def test_non_breaking_space_between_brackets
+    text = "- [\xC2\xA0] ok"
+    assert item = filter(text)[:output].css('.task-list-item').pop, "item expected"
+    assert_equal 'ok', item.text.strip
+  end
+
+  # See: https://github.com/github/github/pull/18362
+  def test_non_breaking_space_between_brackets_in_paras
+    text = <<-md
+- [\xC2\xA0] one
+- [\xC2\xA0] this one will be wrapped in a para
+
+- [\xC2\xA0] this one too, wtf
+    md
+    assert_equal 3, filter(text)[:output].css(@item_selector).size
+  end
+
   protected
 
   def filter(input, context = @context, result = nil)
