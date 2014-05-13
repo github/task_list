@@ -83,7 +83,8 @@ class TaskList::FilterTest < Minitest::Test
 - [ ] one
   - [ ] one.one
     md
-    assert item = filter(text)[:output].css('.task-list-item .task-list-item').pop
+    item = filter(text)[:output].css('.task-list-item .task-list-item').pop
+    assert item, "nested item expected"
   end
 
   def test_handles_complicated_nested_items
@@ -100,6 +101,7 @@ class TaskList::FilterTest < Minitest::Test
   - [ ] two.two
 - [ ] three
     md
+
     assert_equal 6 + 2, filter(text)[:output].css('.task-list-item .task-list-item').size
     assert_equal 2, filter(text)[:output].css('.task-list-item .task-list-item .task-list-item').size
   end
