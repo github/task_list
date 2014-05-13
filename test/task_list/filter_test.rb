@@ -78,6 +78,33 @@ class TaskList::FilterTest < Minitest::Test
     assert_equal unicode, item.text.strip
   end
 
+  def test_handles_nested_items
+    text = <<-md
+- [ ] one
+  - [ ] one.one
+    md
+    assert item = filter(text)[:output].css('.task-list-item .task-list-item').pop
+  end
+
+  def test_handles_complicated_nested_items
+    text = <<-md
+- [ ] one
+  - [ ] one.one
+  - [x] one.two
+    - [ ] one.two.one
+    - [ ] one.two.two
+  - [ ] one.three
+  - [ ] one.four
+- [ ] two
+  - [x] two.one
+  - [ ] two.two
+- [ ] three
+    md
+
+    assert_equal 6 + 2, filter(text)[:output].css('.task-list-item .task-list-item').size
+    assert_equal 2, filter(text)[:output].css('.task-list-item .task-list-item .task-list-item').size
+  end
+
   protected
 
   def filter(input, context = @context, result = nil)
