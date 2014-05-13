@@ -9,9 +9,8 @@ into your GitHub-flavored-Markdown user content.
 The Task List feature is actually made of several different components:
 
 * GitHub-flavored-Markdown Filter
-* Model: summarizes and updates task list items
-* Controller: provides the update interface (optional)
-* JavaScript: enables task list behavior, handles AJAX updates, etc
+* Model: summarizes task list items
+* JavaScript: task list update behavior
 * CSS: styles Markdown task list items
 
 ## Installation
@@ -24,36 +23,43 @@ And then execute:
 
     $ bundle
 
-### Rails 3+: Rails Engine?
+### Rails 3+: Railtie method
 
-TBD
+``` ruby
+# config/application.rb
+require 'task_list/railtie'
+```
 
-### Rails 2.3: Manual.
+### Rails 2.3: Manual method
 
-TBD
+Wherever you have your Sprockets setup:
+
+``` ruby
+Sprockets::Environment.new(Rails.root) do |env|
+  # Load TaskList assets
+  require 'task_list/railtie'
+  TaskList.asset_paths.each do |path|
+    env.append_path path
+  end
+end
+```
+
+If you're not using Sprockets, you're on your own but it's pretty straight
+forward. `task_list/railtie` defines `TaskList.asset_paths` which you can use
+to manage building your asset bundles.
 
 ### CoffeeScript Requirements
 
-The following Bower packages are required:
-
-* jquery
-* https://github.com/github/crema -- `$.pageUpdate`
-* rails-behavior -- `data-remote`
-
-## Usage
-
-TBD
+Aside from requiring CoffeeScript, jQuery is the only other requirement.
 
 ## Testing and Development
 
-To run the functional tests in the browser, install the necessary components
-with `script/bootstrap`:
+JavaScript unit tests can be run with `script/testsuite`.
 
-```
-script/bootstrap
-```
+Ruby unit tests can be run with `rake test`.
 
-Then run the server:
+Functional tests are more for manual testing in the browser. To run, install
+the necessary components with `script/bootstrap` then run the server:
 
 ```
 rackup -p 4011
