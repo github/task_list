@@ -105,7 +105,8 @@ complete   = "[x]"
 escapePattern = (str) ->
   str.
     replace(/([\[\]])/g, "\\$1"). # escape square brackets
-    replace(/\s/, "\\s")          # match all white space
+    replace(/\s/, "\\s").         # match all white space
+    replace("x", "[xX]")          # match all cases
 
 incompletePattern = ///
   #{escapePattern(incomplete)}
