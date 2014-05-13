@@ -74,10 +74,26 @@
           <input type="checkbox" class="task-list-item-checkbox" disabled />
           I'm a task list item
         </li>
+        <li class="task-list-item">
+          <input type="checkbox" class="task-list-item-checkbox" disabled />
+          with non-breaking space
+        </li>
+        <li class="task-list-item">
+          <input type="checkbox" class="task-list-item-checkbox" disabled checked />
+          completed, lower
+        </li>
+        <li class="task-list-item">
+          <input type="checkbox" class="task-list-item-checkbox" disabled checked />
+          completed capitalized
+        </li>
       </ul>
     </div>
     <form action="/update" method="POST" data-remote data-type="json">
-      <textarea name="comment[body]" class="js-task-list-field">- [ ] I'm a task list item</textarea>
+      <textarea name="comment[body]" class="js-task-list-field" cols="40" rows="10">
+- [ ] I'm a task list item
+- [ ] with non-breaking space
+- [x] completed, lower
+- [X] completed capitalized</textarea>
     </form>
   </div>
 
