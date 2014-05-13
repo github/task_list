@@ -24,9 +24,9 @@ class TaskList
   end
 
   class Item < Struct.new(:checkbox_text, :source)
-    Complete = "[x]".freeze # see TaskListFilter
+    Complete = /\[[xX]\]/.freeze # see TaskList::Filter
     def complete?
-      checkbox_text == Complete
+      checkbox_text =~ Complete
     end
   end
 end

@@ -97,6 +97,20 @@
 incomplete = "[ ]"
 complete   = "[x]"
 
+# Escapes the String for regular expression matching.
+escapePattern = (str) ->
+  str.
+    replace(/([\[\]])/g, "\\$1"). # escape square brackets
+    replace(/\s/, "\\s").         # match all white space
+    replace("x", "[xX]")          # match all cases
+
+incompletePattern = ///
+  #{escapePattern(incomplete)}
+///
+completePattern = ///
+  #{escapePattern(complete)}
+///
+
 # Pattern used to identify all task list items.
 # Useful when you need iterate over all items.
 itemPattern = ///
@@ -104,8 +118,8 @@ itemPattern = ///
   (?:\s*[-+*]|(?:\d+\.))? # optional list prefix
   \s*                     # optional whitespace prefix
   (                       # checkbox
-    #{complete.  replace(/([\[\]])/g, "\\$1")}|
-    #{incomplete.replace(/([\[\]])/g, "\\$1")}
+    #{escapePattern(complete)}|
+    #{escapePattern(incomplete)}
   )
   (?=\s)                  # followed by whitespace
 ///
@@ -127,8 +141,8 @@ codeFencesPattern = ///
 itemsInParasPattern = ///
   ^
   (
-    #{complete.  replace(/[\[\]]/g, "\\$1")}|
-    #{incomplete.replace(/[\[\]]/g, "\\$1")}
+    #{escapePattern(complete)}|
+    #{escapePattern(incomplete)}
   )
   .+
   $
@@ -148,9 +162,9 @@ updateTaskListItem = (source, itemIndex, checked) ->
       if index == itemIndex
         line =
           if checked
-            line.replace(incomplete, complete)
+            line.replace(incompletePattern, complete)
           else
-            line.replace(complete, incomplete)
+            line.replace(completePattern, incomplete)
     line
   result.join("\n")
 

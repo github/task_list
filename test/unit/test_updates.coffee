@@ -20,19 +20,36 @@ module "TaskList updates",
       disabled: true
       checked: false
 
+    # non-breaking space. See: https://github.com/github/task-lists/pull/14
+    @nbsp = String.fromCharCode(160)
+    @incompleteNBSPItem = $ '<li>', class: 'task-list-item'
+    @incompleteNBSPCheckbox = $ '<input>',
+      type: 'checkbox'
+      class: 'task-list-item-checkbox'
+      disabled: true
+      checked: false
+
     @field = $ '<textarea>', class: 'js-task-list-field', text: """
       - [x] complete
       - [ ] incomplete
+      - [#{@nbsp}] incompleteNBSP
     """
 
     @changes =
       toComplete: """
       - [ ] complete
       - [ ] incomplete
+      - [#{@nbsp}] incompleteNBSP
       """
       toIncomplete: """
       - [x] complete
       - [x] incomplete
+      - [#{@nbsp}] incompleteNBSP
+      """
+      toIncompleteNBSP: """
+      - [x] complete
+      - [ ] incomplete
+      - [x] incompleteNBSP
       """
 
     @completeItem.append @completeCheckbox
@@ -42,6 +59,10 @@ module "TaskList updates",
     @incompleteItem.append @incompleteCheckbox
     @list.append @incompleteItem
     @incompleteItem.expectedIndex = 2
+
+    @incompleteNBSPItem.append @incompleteNBSPCheckbox
+    @list.append @incompleteNBSPItem
+    @incompleteNBSPItem.expectedIndex = 3
 
     @container.append @list
     @container.append @field
@@ -79,3 +100,18 @@ asyncTest "updates the source, marking the complete item as incomplete", ->
   , 20
 
   @completeCheckbox.click()
+
+# See: https://github.com/github/task-lists/pull/14
+asyncTest "updates the source for items with non-breaking spaces", ->
+  expect 3
+
+  @field.on 'tasklist:changed', (event, index, checked) =>
+    ok checked
+    equal index, @incompleteNBSPItem.expectedIndex
+    equal @field.val(), @changes.toIncompleteNBSP
+
+  setTimeout ->
+    start()
+  , 20
+
+  @incompleteNBSPCheckbox.click()

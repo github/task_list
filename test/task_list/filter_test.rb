@@ -78,6 +78,61 @@ class TaskList::FilterTest < Minitest::Test
     assert_equal unicode, item.text.strip
   end
 
+  def test_handles_nested_items
+    text = <<-md
+- [ ] one
+  - [ ] one.one
+    md
+    assert item = filter(text)[:output].css('.task-list-item .task-list-item').pop
+  end
+
+  def test_handles_complicated_nested_items
+    text = <<-md
+- [ ] one
+  - [ ] one.one
+  - [x] one.two
+    - [ ] one.two.one
+    - [ ] one.two.two
+  - [ ] one.three
+  - [ ] one.four
+- [ ] two
+  - [x] two.one
+  - [ ] two.two
+- [ ] three
+    md
+
+    assert_equal 6 + 2, filter(text)[:output].css('.task-list-item .task-list-item').size
+    assert_equal 2, filter(text)[:output].css('.task-list-item .task-list-item .task-list-item').size
+  end
+
+  # NOTE: This is an edge case experienced regularly by users using a Swiss
+  # German keyboard.
+  # See: https://github.com/github/github/pull/18362
+  def test_non_breaking_space_between_brackets
+    text = "- [\xC2\xA0] ok"
+    assert item = filter(text)[:output].css('.task-list-item').pop, "item expected"
+    assert_equal 'ok', item.text.strip
+  end
+
+  # See: https://github.com/github/github/pull/18362
+  def test_non_breaking_space_between_brackets_in_paras
+    text = <<-md
+- [\xC2\xA0] one
+- [\xC2\xA0] this one will be wrapped in a para
+
+- [\xC2\xA0] this one too, wtf
+    md
+    assert_equal 3, filter(text)[:output].css(@item_selector).size
+  end
+
+  def test_capital_X
+    text = <<-md
+- [x] lower case
+- [X] capital
+    md
+    assert_equal 2, filter(text)[:output].css("[checked]").size
+  end
+
   protected
 
   def filter(input, context = @context, result = nil)
