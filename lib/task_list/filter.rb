@@ -35,7 +35,7 @@ class TaskList
     Complete   = "[x]".freeze
 
     IncompletePattern = /\[[[:space:]]\]/.freeze # matches all whitespace
-    CompletePattern   = Regexp.escape(Complete).freeze
+    CompletePattern   = /\[[xX]\]/.freeze        # matches any capitalization
 
     # Pattern used to identify all task list items.
     # Useful when you need iterate over all items.

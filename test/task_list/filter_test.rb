@@ -125,6 +125,14 @@ class TaskList::FilterTest < Minitest::Test
     assert_equal 3, filter(text)[:output].css(@item_selector).size
   end
 
+  def test_capital_X
+    text = <<-md
+- [x] lower case
+- [X] capital
+    md
+    assert_equal 2, filter(text)[:output].css("[checked]").size
+  end
+
   protected
 
   def filter(input, context = @context, result = nil)
