@@ -47,7 +47,7 @@ class TaskList
       (?=\s)                  # followed by whitespace
     /x
 
-    ListItemSelector = ".//li[task_list_item(.)]".freeze
+    ListItemSelector = "./ul/li[task_list_item(.)]".freeze
 
     class XPathSelectorFunction
       def self.task_list_item(nodes)
@@ -96,8 +96,8 @@ class TaskList
     #
     # Returns an Array of Nokogiri::XML::Element objects for ordered and
     # unordered lists.
-    def list_items
-      doc.xpath(ListItemSelector, XPathSelectorFunction)
+    def list_items(node = doc)
+      node.xpath(ListItemSelector, XPathSelectorFunction)
     end
 
     # Filters the source for task list items.
@@ -108,9 +108,12 @@ class TaskList
     # Modifications apply to the parsed document directly.
     #
     # Returns nothing.
-    def filter!
-      list_items.reverse.each do |li|
+    def filter(nodes)
+      list_items(nodes).each do |li|
         add_css_class(li.parent, 'task-list')
+
+        # filter nested task lists
+        filter(li)
 
         outer, inner =
           if p = li.xpath(ItemParaSelector)[0]
@@ -118,10 +121,11 @@ class TaskList
           else
             [li, li.inner_html]
           end
+
         if match = (inner.chomp =~ ItemPattern && $1)
           item = TaskList::Item.new(match, inner)
           # prepend because we're iterating in reverse
-          task_list_items.unshift item
+          task_list_items.push item
 
           add_css_class(li, 'task-list-item')
           outer.inner_html = render_task_list_item(item)
@@ -130,7 +134,7 @@ class TaskList
     end
 
     def call
-      filter!
+      filter(doc)
       doc
     end
 
