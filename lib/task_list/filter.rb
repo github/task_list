@@ -47,20 +47,16 @@ class TaskList
       (?=\s)                  # followed by whitespace
     /x
 
-    ListSelector = [
-      # select UL/OL
-      ".//li[starts-with(text(),'[ ]')]/..",
-      ".//li[starts-with(text(),'[x]')]/..",
-      # and those wrapped in Ps
-      ".//li/p[1][starts-with(text(),'[ ]')]/../..",
-      ".//li/p[1][starts-with(text(),'[x]')]/../.."
-    ].join(' | ').freeze
+    ListItemSelector = ".//li[task_list_item(.)]".freeze
 
-    # Selects all LIs from a TaskList UL/OL
-    ItemSelector = ".//li".freeze
+    class XPathSelectorFunction
+      def self.task_list_item(nodes)
+        nodes if nodes.text =~ ItemPattern
+      end
+    end
 
     # Selects first P tag of an LI, if present
-    ItemParaSelector = ".//p[1]".freeze
+    ItemParaSelector = "./p[1]".freeze
 
     # List of `TaskList::Item` objects that were recognized in the document.
     # This is available in the result hash as `:task_list_items`.
@@ -100,20 +96,22 @@ class TaskList
     #
     # Returns an Array of Nokogiri::XML::Element objects for ordered and
     # unordered lists.
-    def task_lists
-      doc.xpath(ListSelector)
+    def list_items
+      doc.xpath(ListItemSelector, XPathSelectorFunction)
     end
 
-    # Public: filters a Nokogiri::XML::Element ordered/unordered list, marking
-    # up the list items in order to add behavior and include metadata.
+    # Filters the source for task list items.
     #
-    # Modifies the provided node.
+    # Each item is wrapped in HTML to identify, style, and layer
+    # useful behavior on top of.
+    #
+    # Modifications apply to the parsed document directly.
     #
     # Returns nothing.
-    def filter_list(node)
-      add_css_class(node, 'task-list')
+    def filter!
+      list_items.reverse.each do |li|
+        add_css_class(li.parent, 'task-list')
 
-      node.xpath(ItemSelector).reverse.each do |li|
         outer, inner =
           if p = li.xpath(ItemParaSelector)[0]
             [p, p.inner_html]
@@ -131,20 +129,6 @@ class TaskList
       end
     end
 
-    # Filters the source for task list items.
-    #
-    # Each item is wrapped in HTML to identify, style, and layer
-    # useful behavior on top of.
-    #
-    # Modifications apply to the parsed document directly.
-    #
-    # Returns nothing.
-    def filter!
-      task_lists.each do |node|
-        filter_list node
-      end
-    end
-
     def call
       filter!
       doc
@@ -154,6 +138,7 @@ class TaskList
     # names.
     def add_css_class(node, *new_class_names)
       class_names = (node['class'] || '').split(' ')
+      return if new_class_names.all? { |klass| class_names.include?(klass) }
       class_names.concat(new_class_names)
       node['class'] = class_names.uniq.join(' ')
     end
