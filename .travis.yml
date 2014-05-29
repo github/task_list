@@ -1,7 +1,6 @@
 language: ruby
 script: ./script/cibuild
-before_install:
-  - ./script/bootstrap
+before_install: ./script/bootstrap
 rvm:
   - 1.9.3
   - 2.0.0
