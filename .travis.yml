@@ -1,0 +1,4 @@
+language: ruby
+script: ./script/cibuild
+before_install:
+  - ./script/bootstrap
