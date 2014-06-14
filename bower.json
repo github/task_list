@@ -8,7 +8,7 @@
     "qunit": ">= 1.0"
   },
   "main": [
-    "./app/assets/javascripts/task_lists.coffee",
-    "./app/assets/stylesheets/task_lists.scss"
+    "app/assets/javascripts/task_lists.coffee",
+    "app/assets/stylesheets/task_lists.scss"
   ]
 }
