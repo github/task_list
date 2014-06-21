@@ -8,7 +8,7 @@ rvm:
 notifications:
   email: false
 cache:
-  bundler: true
   directories:
+    - vendor/bundle
     - node_modules
     - bower_components
