@@ -1,5 +1,5 @@
 {
-  "name": "task-lists",
+  "name": "task_list",
   "version": "0.4.0",
   "dependencies": {
     "jquery": ">= 1.9.1"
@@ -8,7 +8,7 @@
     "qunit": ">= 1.0"
   },
   "main": [
-    "app/assets/javascripts/task_lists.coffee",
-    "app/assets/stylesheets/task_lists.scss"
+    "app/assets/javascripts/task_list.coffee",
+    "app/assets/stylesheets/task_list.scss"
   ]
 }

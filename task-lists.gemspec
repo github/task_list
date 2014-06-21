@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'task_list/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "task-lists"
+  gem.name          = "task_list"
   gem.version       = TaskList::VERSION
   gem.authors       = ["Matt Todd"]
   gem.email         = ["matt@github.com"]

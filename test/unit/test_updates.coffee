@@ -1,4 +1,4 @@
-#= require task_lists
+#= require task_list
 
 module "TaskList updates",
   setup: ->
