@@ -17,7 +17,7 @@ The Task List feature is actually made of several different components:
 
 Add this line to your application's Gemfile:
 
-    gem 'task-lists'
+    gem 'task_list'
 
 And then execute:
 

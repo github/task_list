@@ -10,7 +10,7 @@ class TaskList
 
   if defined? ::Rails::Railtie
     class Railtie < ::Rails::Railtie
-      initializer "task-lists" do |app|
+      initializer "task_list" do |app|
         TaskList.asset_paths.each do |path|
           app.config.assets.paths << path
         end
