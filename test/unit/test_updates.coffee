@@ -65,6 +65,22 @@ module "TaskList updates",
       disabled: true
       checked: false
 
+    @orderedList = $ '<ol>', class: 'task-list'
+
+    @orderedCompleteItem = $ '<li>', class: 'task-list-item'
+    @orderedCompleteCheckbox = $ '<input>',
+      type: 'checkbox'
+      class: 'task-list-item-checkbox'
+      disabled: true
+      checked: true
+
+    @orderedIncompleteItem = $ '<li>', class: 'task-list-item'
+    @orderedIncompleteCheckbox = $ '<input>',
+      type: 'checkbox'
+      class: 'task-list-item-checkbox'
+      disabled: true
+      checked: false
+
     @field = $ '<textarea>', class: 'js-task-list-field', text: """
       - [x] complete
       - [ ] incomplete
@@ -73,6 +89,8 @@ module "TaskList updates",
       > - [ ] quoted incomplete
       > > - [x] inner complete
       > > - [ ] inner incomplete
+      > 0. [x] ordered complete
+      > 0. [ ] ordered incomplete
     """
 
     @changes =
@@ -84,6 +102,8 @@ module "TaskList updates",
       > - [ ] quoted incomplete
       > > - [x] inner complete
       > > - [ ] inner incomplete
+      > 0. [x] ordered complete
+      > 0. [ ] ordered incomplete
       """
       toQuotedComplete: """
       - [x] complete
@@ -93,6 +113,8 @@ module "TaskList updates",
       > - [ ] quoted incomplete
       > > - [x] inner complete
       > > - [ ] inner incomplete
+      > 0. [x] ordered complete
+      > 0. [ ] ordered incomplete
       """
       toInnerComplete: """
       - [x] complete
@@ -102,6 +124,19 @@ module "TaskList updates",
       > - [ ] quoted incomplete
       > > - [ ] inner complete
       > > - [ ] inner incomplete
+      > 0. [x] ordered complete
+      > 0. [ ] ordered incomplete
+      """
+      toOrderedComplete: """
+      - [x] complete
+      - [ ] incomplete
+      - [#{@nbsp}] incompleteNBSP
+      > - [x] quoted complete
+      > - [ ] quoted incomplete
+      > > - [x] inner complete
+      > > - [ ] inner incomplete
+      > 0. [ ] ordered complete
+      > 0. [ ] ordered incomplete
       """
       toIncomplete: """
       - [x] complete
@@ -111,6 +146,8 @@ module "TaskList updates",
       > - [ ] quoted incomplete
       > > - [x] inner complete
       > > - [ ] inner incomplete
+      > 0. [x] ordered complete
+      > 0. [ ] ordered incomplete
       """
       toQuotedIncomplete: """
       - [x] complete
@@ -120,6 +157,8 @@ module "TaskList updates",
       > - [x] quoted incomplete
       > > - [x] inner complete
       > > - [ ] inner incomplete
+      > 0. [x] ordered complete
+      > 0. [ ] ordered incomplete
       """
       toInnerIncomplete: """
       - [x] complete
@@ -129,6 +168,19 @@ module "TaskList updates",
       > - [ ] quoted incomplete
       > > - [x] inner complete
       > > - [x] inner incomplete
+      > 0. [x] ordered complete
+      > 0. [ ] ordered incomplete
+      """
+      toOrderedIncomplete: """
+      - [x] complete
+      - [ ] incomplete
+      - [#{@nbsp}] incompleteNBSP
+      > - [x] quoted complete
+      > - [ ] quoted incomplete
+      > > - [x] inner complete
+      > > - [ ] inner incomplete
+      > 0. [x] ordered complete
+      > 0. [x] ordered incomplete
       """
       toIncompleteNBSP: """
       - [x] complete
@@ -138,6 +190,8 @@ module "TaskList updates",
       > - [ ] quoted incomplete
       > > - [x] inner complete
       > > - [ ] inner incomplete
+      > 0. [x] ordered complete
+      > 0. [ ] ordered incomplete
       """
 
     @completeItem.append @completeCheckbox
@@ -164,7 +218,6 @@ module "TaskList updates",
     @quotedIncompleteItem.expectedIndex = 5
 
     @blockquote.append @quotedList
-    @blockquote.append @field
 
     @innerCompleteItem.append @innerCompleteCheckbox
     @innerList.append @innerCompleteItem
@@ -180,6 +233,18 @@ module "TaskList updates",
     @blockquote.append @innerBlockquote
 
     @container.append @blockquote 
+
+    @orderedCompleteItem.append @orderedCompleteCheckbox
+    @orderedList.append @orderedCompleteItem
+    @orderedCompleteItem.expectedIndex = 8
+
+    @orderedIncompleteItem.append @orderedIncompleteCheckbox
+    @orderedList.append @orderedIncompleteItem
+    @orderedIncompleteItem.expectedIndex = 9
+    
+    @container.append @orderedList
+    
+    @blockquote.append @field
 
     $('#qunit-fixture').append(@container)
     @container.taskList()
@@ -285,4 +350,32 @@ asyncTest "updates the source of a quoted quoted item, marking the complete item
   , 20
 
   @innerCompleteCheckbox.click()
+
+asyncTest "updates the source of an ordered list item, marking the incomplete item as complete", ->
+  expect 3
+
+  @field.on 'tasklist:changed', (event, index, checked) =>
+    ok checked
+    equal index, @orderedIncompleteItem.expectedIndex
+    equal @field.val(), @changes.toOrderedIncomplete
+
+  setTimeout ->
+    start()
+  , 20
+
+  @orderedIncompleteCheckbox.click()
+
+asyncTest "updates the source of an ordered list item, marking the complete item as incomplete", ->
+  expect 3
+
+  @field.on 'tasklist:changed', (event, index, checked) =>
+    ok !checked
+    equal index, @orderedCompleteItem.expectedIndex
+    equal @field.val(), @changes.toOrderedComplete
+
+  setTimeout ->
+    start()
+  , 20
+
+  @orderedCompleteCheckbox.click()
 
