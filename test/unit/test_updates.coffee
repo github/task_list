@@ -28,11 +28,51 @@ module "TaskList updates",
       class: 'task-list-item-checkbox'
       disabled: true
       checked: false
+      
+    @blockquote = $ '<blockquote>'
+
+    @quotedList = $ '<ul>', class: 'task-list'
+
+    @quotedCompleteItem = $ '<li>', class: 'task-list-item'
+    @quotedCompleteCheckbox = $ '<input>',
+      type: 'checkbox'
+      class: 'task-list-item-checkbox'
+      disabled: true
+      checked: true
+
+    @quotedIncompleteItem = $ '<li>', class: 'task-list-item'
+    @quotedIncompleteCheckbox = $ '<input>',
+      type: 'checkbox'
+      class: 'task-list-item-checkbox'
+      disabled: true
+      checked: false
+      
+    @innerBlockquote = $ '<blockquote>'
+
+    @innerList = $ '<ul>', class: 'task-list'
+
+    @innerCompleteItem = $ '<li>', class: 'task-list-item'
+    @innerCompleteCheckbox = $ '<input>',
+      type: 'checkbox'
+      class: 'task-list-item-checkbox'
+      disabled: true
+      checked: true
+
+    @innerIncompleteItem = $ '<li>', class: 'task-list-item'
+    @innerIncompleteCheckbox = $ '<input>',
+      type: 'checkbox'
+      class: 'task-list-item-checkbox'
+      disabled: true
+      checked: false
 
     @field = $ '<textarea>', class: 'js-task-list-field', text: """
       - [x] complete
       - [ ] incomplete
       - [#{@nbsp}] incompleteNBSP
+      > - [x] quoted complete
+      > - [ ] quoted incomplete
+      > > - [x] inner complete
+      > > - [ ] inner incomplete
     """
 
     @changes =
@@ -40,16 +80,64 @@ module "TaskList updates",
       - [ ] complete
       - [ ] incomplete
       - [#{@nbsp}] incompleteNBSP
+      > - [x] quoted complete
+      > - [ ] quoted incomplete
+      > > - [x] inner complete
+      > > - [ ] inner incomplete
+      """
+      toQuotedComplete: """
+      - [x] complete
+      - [ ] incomplete
+      - [#{@nbsp}] incompleteNBSP
+      > - [ ] quoted complete
+      > - [ ] quoted incomplete
+      > > - [x] inner complete
+      > > - [ ] inner incomplete
+      """
+      toInnerComplete: """
+      - [x] complete
+      - [ ] incomplete
+      - [#{@nbsp}] incompleteNBSP
+      > - [x] quoted complete
+      > - [ ] quoted incomplete
+      > > - [ ] inner complete
+      > > - [ ] inner incomplete
       """
       toIncomplete: """
       - [x] complete
       - [x] incomplete
       - [#{@nbsp}] incompleteNBSP
+      > - [x] quoted complete
+      > - [ ] quoted incomplete
+      > > - [x] inner complete
+      > > - [ ] inner incomplete
+      """
+      toQuotedIncomplete: """
+      - [x] complete
+      - [ ] incomplete
+      - [#{@nbsp}] incompleteNBSP
+      > - [x] quoted complete
+      > - [x] quoted incomplete
+      > > - [x] inner complete
+      > > - [ ] inner incomplete
+      """
+      toInnerIncomplete: """
+      - [x] complete
+      - [ ] incomplete
+      - [#{@nbsp}] incompleteNBSP
+      > - [x] quoted complete
+      > - [ ] quoted incomplete
+      > > - [x] inner complete
+      > > - [x] inner incomplete
       """
       toIncompleteNBSP: """
       - [x] complete
       - [ ] incomplete
       - [x] incompleteNBSP
+      > - [x] quoted complete
+      > - [ ] quoted incomplete
+      > > - [x] inner complete
+      > > - [ ] inner incomplete
       """
 
     @completeItem.append @completeCheckbox
@@ -66,6 +154,32 @@ module "TaskList updates",
 
     @container.append @list
     @container.append @field
+
+    @quotedCompleteItem.append @quotedCompleteCheckbox
+    @quotedList.append @quotedCompleteItem
+    @quotedCompleteItem.expectedIndex = 4
+
+    @quotedIncompleteItem.append @quotedIncompleteCheckbox
+    @quotedList.append @quotedIncompleteItem
+    @quotedIncompleteItem.expectedIndex = 5
+
+    @blockquote.append @quotedList
+    @blockquote.append @field
+
+    @innerCompleteItem.append @innerCompleteCheckbox
+    @innerList.append @innerCompleteItem
+    @innerCompleteItem.expectedIndex = 6
+
+    @innerIncompleteItem.append @innerIncompleteCheckbox
+    @innerList.append @innerIncompleteItem
+    @innerIncompleteItem.expectedIndex = 7
+
+    @innerBlockquote.append @innerList
+    @innerBlockquote.append @innerField
+
+    @blockquote.append @innerBlockquote
+
+    @container.append @blockquote 
 
     $('#qunit-fixture').append(@container)
     @container.taskList()
@@ -115,3 +229,60 @@ asyncTest "updates the source for items with non-breaking spaces", ->
   , 20
 
   @incompleteNBSPCheckbox.click()
+
+asyncTest "updates the source of a quoted item, marking the incomplete item as complete", ->
+  expect 3
+
+  @field.on 'tasklist:changed', (event, index, checked) =>
+    ok checked
+    equal index, @quotedIncompleteItem.expectedIndex
+    equal @field.val(), @changes.toQuotedIncomplete
+
+  setTimeout ->
+    start()
+  , 20
+
+  @quotedIncompleteCheckbox.click()
+
+asyncTest "updates the source of a quoted item, marking the complete item as incomplete", ->
+  expect 3
+
+  @field.on 'tasklist:changed', (event, index, checked) =>
+    ok !checked
+    equal index, @quotedCompleteItem.expectedIndex
+    equal @field.val(), @changes.toQuotedComplete
+
+  setTimeout ->
+    start()
+  , 20
+
+  @quotedCompleteCheckbox.click()
+
+asyncTest "updates the source of a quoted quoted item, marking the incomplete item as complete", ->
+  expect 3
+
+  @field.on 'tasklist:changed', (event, index, checked) =>
+    ok checked
+    equal index, @innerIncompleteItem.expectedIndex
+    equal @field.val(), @changes.toInnerIncomplete
+
+  setTimeout ->
+    start()
+  , 20
+
+  @innerIncompleteCheckbox.click()
+
+asyncTest "updates the source of a quoted quoted item, marking the complete item as incomplete", ->
+  expect 3
+
+  @field.on 'tasklist:changed', (event, index, checked) =>
+    ok !checked
+    equal index, @innerCompleteItem.expectedIndex
+    equal @field.val(), @changes.toInnerComplete
+
+  setTimeout ->
+    start()
+  , 20
+
+  @innerCompleteCheckbox.click()
+
