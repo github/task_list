@@ -115,7 +115,11 @@ completePattern = ///
 # Useful when you need iterate over all items.
 itemPattern = ///
   ^
-  (?:\s*(?:>\s+)*[-+*]|(?:\d+\.))? # optional list prefix
+  (?:                     # optional list prefix, consisting of
+    \s*                   # optional leading whitespace
+    (?:>\s+)*             # zero or more blockquotes
+    [-+*]|(?:\d+\.)       # item indicato
+  )?
   \s*                     # optional whitespace prefix
   (                       # checkbox
     #{escapePattern(complete)}|
