@@ -118,7 +118,7 @@ itemPattern = ///
   (?:                     # optional list prefix, consisting of
     \s*                   # optional leading whitespace
     (?:>\s+)*             # zero or more blockquotes
-    [-+*]|(?:\d+\.)       # item indicato
+    (?:[-+*]|(?:\d+\.))   # item indicator
   )?
   \s*                     # optional whitespace prefix
   (                       # checkbox
