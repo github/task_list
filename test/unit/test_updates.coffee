@@ -87,7 +87,7 @@ module "TaskList updates",
       - [#{@nbsp}] incompleteNBSP
       > - [x] quoted complete
       > - [ ] quoted incomplete
-      > > - [x] inner complete
+      >> - [x] inner complete
       > > - [ ] inner incomplete
       > 0. [x] ordered complete
       > 0. [ ] ordered incomplete
@@ -100,7 +100,7 @@ module "TaskList updates",
       - [#{@nbsp}] incompleteNBSP
       > - [x] quoted complete
       > - [ ] quoted incomplete
-      > > - [x] inner complete
+      >> - [x] inner complete
       > > - [ ] inner incomplete
       > 0. [x] ordered complete
       > 0. [ ] ordered incomplete
@@ -111,7 +111,7 @@ module "TaskList updates",
       - [#{@nbsp}] incompleteNBSP
       > - [ ] quoted complete
       > - [ ] quoted incomplete
-      > > - [x] inner complete
+      >> - [x] inner complete
       > > - [ ] inner incomplete
       > 0. [x] ordered complete
       > 0. [ ] ordered incomplete
@@ -122,7 +122,7 @@ module "TaskList updates",
       - [#{@nbsp}] incompleteNBSP
       > - [x] quoted complete
       > - [ ] quoted incomplete
-      > > - [ ] inner complete
+      >> - [ ] inner complete
       > > - [ ] inner incomplete
       > 0. [x] ordered complete
       > 0. [ ] ordered incomplete
@@ -133,7 +133,7 @@ module "TaskList updates",
       - [#{@nbsp}] incompleteNBSP
       > - [x] quoted complete
       > - [ ] quoted incomplete
-      > > - [x] inner complete
+      >> - [x] inner complete
       > > - [ ] inner incomplete
       > 0. [ ] ordered complete
       > 0. [ ] ordered incomplete
@@ -144,7 +144,7 @@ module "TaskList updates",
       - [#{@nbsp}] incompleteNBSP
       > - [x] quoted complete
       > - [ ] quoted incomplete
-      > > - [x] inner complete
+      >> - [x] inner complete
       > > - [ ] inner incomplete
       > 0. [x] ordered complete
       > 0. [ ] ordered incomplete
@@ -155,7 +155,7 @@ module "TaskList updates",
       - [#{@nbsp}] incompleteNBSP
       > - [x] quoted complete
       > - [x] quoted incomplete
-      > > - [x] inner complete
+      >> - [x] inner complete
       > > - [ ] inner incomplete
       > 0. [x] ordered complete
       > 0. [ ] ordered incomplete
@@ -166,7 +166,7 @@ module "TaskList updates",
       - [#{@nbsp}] incompleteNBSP
       > - [x] quoted complete
       > - [ ] quoted incomplete
-      > > - [x] inner complete
+      >> - [x] inner complete
       > > - [x] inner incomplete
       > 0. [x] ordered complete
       > 0. [ ] ordered incomplete
@@ -177,7 +177,7 @@ module "TaskList updates",
       - [#{@nbsp}] incompleteNBSP
       > - [x] quoted complete
       > - [ ] quoted incomplete
-      > > - [x] inner complete
+      >> - [x] inner complete
       > > - [ ] inner incomplete
       > 0. [x] ordered complete
       > 0. [x] ordered incomplete
@@ -188,7 +188,7 @@ module "TaskList updates",
       - [x] incompleteNBSP
       > - [x] quoted complete
       > - [ ] quoted incomplete
-      > > - [x] inner complete
+      >> - [x] inner complete
       > > - [ ] inner incomplete
       > 0. [x] ordered complete
       > 0. [ ] ordered incomplete
