@@ -28,7 +28,7 @@ module "TaskList updates",
       class: 'task-list-item-checkbox'
       disabled: true
       checked: false
-      
+
     @blockquote = $ '<blockquote>'
 
     @quotedList = $ '<ul>', class: 'task-list'
@@ -46,7 +46,7 @@ module "TaskList updates",
       class: 'task-list-item-checkbox'
       disabled: true
       checked: false
-      
+
     @innerBlockquote = $ '<blockquote>'
 
     @innerList = $ '<ul>', class: 'task-list'
@@ -232,7 +232,7 @@ module "TaskList updates",
 
     @blockquote.append @innerBlockquote
 
-    @container.append @blockquote 
+    @container.append @blockquote
 
     @orderedCompleteItem.append @orderedCompleteCheckbox
     @orderedList.append @orderedCompleteItem
@@ -241,9 +241,9 @@ module "TaskList updates",
     @orderedIncompleteItem.append @orderedIncompleteCheckbox
     @orderedList.append @orderedIncompleteItem
     @orderedIncompleteItem.expectedIndex = 9
-    
+
     @container.append @orderedList
-    
+
     @blockquote.append @field
 
     $('#qunit-fixture').append(@container)
