@@ -127,7 +127,7 @@ itemPattern = ///
   )
   (?!                     # is not a link
     \s*                   # with optional whitespace
-    (?=\(.*?\)|\[.*?\])   # because of destination or reference
+    (?:\(.*?\)|\[.*?\])   # because of destination or reference
   )
   (?=\s)                  # is followed by whitespace
 ///
