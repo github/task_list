@@ -469,7 +469,7 @@ asyncTest "update ignores items that look like Task List items but are links", -
     - [ ] [reference]
     - [ ] () collapsed
     - [ ] [] collapsed reference
-    - [ ] \(escaped item)
+    - [ ] \\(escaped item)
     - [ ] item
   """
 
@@ -478,11 +478,11 @@ asyncTest "update ignores items that look like Task List items but are links", -
     - [ ] [reference]
     - [ ] () collapsed
     - [ ] [] collapsed reference
-    - [ ] \(escaped item)
+    - [ ] \\(escaped item)
     - [x] item
   """
 
-  item1.append item2Checkbox
+  item1.append item1Checkbox
   list.append item1
   item1.expectedIndex = 1
 
