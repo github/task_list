@@ -28,7 +28,7 @@ module "TaskList updates",
       class: 'task-list-item-checkbox'
       disabled: true
       checked: false
-      
+
     @blockquote = $ '<blockquote>'
 
     @quotedList = $ '<ul>', class: 'task-list'
@@ -46,7 +46,7 @@ module "TaskList updates",
       class: 'task-list-item-checkbox'
       disabled: true
       checked: false
-      
+
     @innerBlockquote = $ '<blockquote>'
 
     @innerList = $ '<ul>', class: 'task-list'
@@ -232,7 +232,7 @@ module "TaskList updates",
 
     @blockquote.append @innerBlockquote
 
-    @container.append @blockquote 
+    @container.append @blockquote
 
     @orderedCompleteItem.append @orderedCompleteCheckbox
     @orderedList.append @orderedCompleteItem
@@ -241,9 +241,9 @@ module "TaskList updates",
     @orderedIncompleteItem.append @orderedIncompleteCheckbox
     @orderedList.append @orderedIncompleteItem
     @orderedIncompleteItem.expectedIndex = 9
-    
+
     @container.append @orderedList
-    
+
     @blockquote.append @field
 
     $('#qunit-fixture').append(@container)
@@ -379,3 +379,64 @@ asyncTest "updates the source of an ordered list item, marking the complete item
 
   @orderedCompleteCheckbox.click()
 
+asyncTest "update ignores items that look like Task List items but lack list prefix", ->
+  expect 3
+
+  $('#qunit-fixture').empty()
+
+  container = $ '<div>', class: 'js-task-list-container'
+
+  list = $ '<ul>', class: 'task-list'
+
+  item1 = $ '<li>', class: 'task-list-item'
+  item1Checkbox = $ '<input>',
+    type: 'checkbox'
+    class: 'task-list-item-checkbox'
+    disabled: true
+    checked: false
+
+  item2 = $ '<li>', class: 'task-list-item'
+  item2Checkbox = $ '<input>',
+    type: 'checkbox'
+    class: 'task-list-item-checkbox'
+    disabled: true
+    checked: false
+
+  field = $ '<textarea>', class: 'js-task-list-field', text: """
+    [ ] one
+    [ ] two
+    - [ ] three
+    - [ ] four
+  """
+
+  changes = """
+    [ ] one
+    [ ] two
+    - [ ] three
+    - [x] four
+  """
+
+  item1.append item1Checkbox
+  list.append item1
+  item1.expectedIndex = 1
+
+  item2.append item2Checkbox
+  list.append item2
+  item2.expectedIndex = 2
+
+  container.append list
+  container.append field
+
+  $('#qunit-fixture').append(container)
+  container.taskList()
+
+  field.on 'tasklist:changed', (event, index, checked) =>
+    ok checked
+    equal index, item2.expectedIndex
+    equal field.val(), changes
+
+  setTimeout ->
+    start()
+  , 20
+
+  item2Checkbox.click()
