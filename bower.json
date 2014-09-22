@@ -10,5 +10,17 @@
   "main": [
     "app/assets/javascripts/task_list.coffee",
     "app/assets/stylesheets/task_list.scss"
+  ],
+  "ignore": [
+    ".gitignore",
+    ".travis.yml",
+    "*.gemspec",
+    "*.md",
+    "config.ru",
+    "Gemfile",
+    "lib/",
+    "Rakefile",
+    "script/",
+    "test/"
   ]
 }
