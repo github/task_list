@@ -125,7 +125,11 @@ itemPattern = ///
     #{escapePattern(complete)}|
     #{escapePattern(incomplete)}
   )
-  (?=\s)                  # followed by whitespace
+  (?!                     # is not a link
+    \s*                   # with optional whitespace
+    (?:\(.*?\)|\[.*?\])   # because of destination or reference
+  )
+  (?=\s)                  # is followed by whitespace
 ///
 
 # Used to filter out code fences from the source for comparison only.
