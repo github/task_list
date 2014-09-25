@@ -506,3 +506,61 @@ asyncTest "update ignores items that look like Task List items but are links", -
   , 20
 
   item2Checkbox.click()
+
+asyncTest "updates items followed by links", ->
+  expect 3
+
+  $('#qunit-fixture').empty()
+
+  container = $ '<div>', class: 'js-task-list-container'
+
+  list = $ '<ul>', class: 'task-list'
+
+  item1 = $ '<li>', class: 'task-list-item'
+  item1Checkbox = $ '<input>',
+    type: 'checkbox'
+    class: 'task-list-item-checkbox'
+    disabled: true
+    checked: false
+
+  item2 = $ '<li>', class: 'task-list-item'
+  item2Checkbox = $ '<input>',
+    type: 'checkbox'
+    class: 'task-list-item-checkbox'
+    disabled: true
+    checked: false
+
+  field = $ '<textarea>', class: 'js-task-list-field', text: """
+    - [ ] [link label](link)
+    - [ ] [reference label][reference]
+  """
+
+  changes = """
+    - [ ] [link label](link)
+    - [x] [reference label][reference]
+  """
+
+  item1.append item1Checkbox
+  list.append item1
+  item1.expectedIndex = 1
+
+  item2.append item2Checkbox
+  list.append item2
+  item2.expectedIndex = 2
+
+  container.append list
+  container.append field
+
+  $('#qunit-fixture').append(container)
+  container.taskList()
+
+  field.on 'tasklist:changed', (event, index, checked) =>
+    ok checked
+    equal index, item2.expectedIndex
+    equal field.val(), changes
+
+  setTimeout ->
+    start()
+  , 20
+
+  item2Checkbox.click()
