@@ -130,16 +130,6 @@ itemPattern = ///
     \s*
     \(.*?\)
   )
-  (?=                     # and not part of a link reference
-    \s*
-    (?:(?:\[.*?\]\s*){2})*
-    (?:[^\[]|$)
-  )
-  # (?!                     # is not a link
-  #   \s*                   # with optional whitespace
-  #   (?:\(.*?\)|\[.*?\])   # because of destination or reference
-  #   (?:\s*[^\[\(])        # but itself not first part of a link
-  # )
 ///
 
 # Used to filter out code fences from the source for comparison only.
