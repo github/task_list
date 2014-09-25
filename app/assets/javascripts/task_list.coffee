@@ -125,6 +125,7 @@ itemPattern = ///
     #{escapePattern(complete)}|
     #{escapePattern(incomplete)}
   )
+  (?=\s)                  # is followed by whitespace
   (?!                     # but not a link to this destination
     \s*
     \(.*?\)
@@ -139,7 +140,6 @@ itemPattern = ///
   #   (?:\(.*?\)|\[.*?\])   # because of destination or reference
   #   (?:\s*[^\[\(])        # but itself not first part of a link
   # )
-  (?=\s)                  # is followed by whitespace
 ///
 
 # Used to filter out code fences from the source for comparison only.
