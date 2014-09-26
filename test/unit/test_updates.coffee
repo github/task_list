@@ -466,18 +466,18 @@ asyncTest "update ignores items that look like Task List items but are links", -
 
   field = $ '<textarea>', class: 'js-task-list-field', text: """
     - [ ] (link)
-    # - [ ] [reference]
+    - [ ] [reference]
     - [ ] () collapsed
-    # - [ ] [] collapsed reference
+    - [ ] [] collapsed reference
     - [ ] \\(escaped item)
     - [ ] item
   """
 
   changes = """
     - [ ] (link)
-    # - [ ] [reference]
+    - [ ] [reference]
     - [ ] () collapsed
-    # - [ ] [] collapsed reference
+    - [ ] [] collapsed reference
     - [ ] \\(escaped item)
     - [x] item
   """

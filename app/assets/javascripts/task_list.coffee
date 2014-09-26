@@ -125,10 +125,17 @@ itemPattern = ///
     #{escapePattern(complete)}|
     #{escapePattern(incomplete)}
   )
-  (?=\s)                  # is followed by whitespace
-  (?!                     # but not a link to this destination
-    \s*
-    \(.*?\)
+  \s+                     # is followed by whitespace
+  (                       # followed by anything unmistakable for a link,
+    ([^\[\(]|$)           # or end of line
+  |
+    (?!
+      \(.*?\)             # or, not immediately followed by a link URL
+    )
+    (                     # and not part of a link reference
+      (\[.*?\]\s*(\[.*?\]|\(.*?\))\s*)+
+      ([^\[]|$)
+    )
   )
 ///
 
