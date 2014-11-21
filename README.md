@@ -69,4 +69,4 @@ Navigate to http://localhost:4011/test/functional/test_task_lists_behavior.html
 
 ## Contributing
 
-Read the [Contributing Guidelines] and open a Pull Request!
+Read the [Contributing Guidelines](CONTRIBUTING.md) and open a Pull Request!
