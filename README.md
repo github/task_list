@@ -69,8 +69,4 @@ Navigate to http://localhost:4011/test/functional/test_task_lists_behavior.html
 
 ## Contributing
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+Read the [Contributing Guidelines] and open a Pull Request!
