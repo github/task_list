@@ -13,6 +13,62 @@ The Task List feature is made of several different components:
 * JavaScript: frontend task list update behavior
 * CSS: styles Markdown task list items
 
+## Usage
+
+The backend components are designed for rendering the Task List item checkboxes, and the frontend components handle updating the Markdown when .
+
+### Backend: Markdown pipeline filter
+
+Rendering Task List item checkboxes from source Markdown depends on the `TaskList::Filter`, designed to integrate with the [`html-pipeline`](https://github.com/jch/html-pipeline) gem. For example:
+
+``` ruby
+require 'html/pipeline'
+require 'task_list/filter'
+
+pipeline = HTML::Pipeline.new [
+  HTML::Pipeline::MarkdownFilter,
+  TaskList::Filter
+]
+
+pipeline.call "- [ ] task list item"
+```
+
+### Frontend: Markdown Updates
+
+Task List updates on the frontend require specific HTML markup structure, and must be enabled with JavaScript.
+
+Rendered HTML (the `<ul>` element below) should be contained in a `js-task-list-container` container element and include a sibling `textarea.js-task-list-field` element that is updated when checkboxes are changed.
+
+``` markdown
+- [ ] text
+```
+
+``` html
+<div class="js-task-list-container">
+  <ul class="task-list">
+    <li class="task-list-item">
+      <input type="checkbox" class="js-task-list-item-checkbox" disabled />
+      text
+    </li>
+  </ul>
+  <form>
+    <textarea class="js-task-list-field">- [ ] text</textarea>
+  </form>
+</div>
+```
+
+Enable Task List updates with:
+
+``` javascript
+$('.js-task-list-container').taskList('enable')
+```
+
+NOTE: Updates are not persisted to the server automatically. Persistence is the responsibility of the integrating application, accomplished by hooking into the `tasklist:change` JavaScript event. For instance, we use AJAX to submit a hidden form on update.
+
+Read through the documented behaviors and samples [in the source][frontend_behaviors] for more detail, including documented events.
+
+[frontend_behaviors]: https://github.com/github/task_list/blob/master/app/assets/javascripts/task_list.coffee
+
 ## Installation
 
 Task Lists are packaged as both a RubyGem with both backend and frontend behavior, and a Bower package wiht just the frontend behavior.
