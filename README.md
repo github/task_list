@@ -13,9 +13,9 @@ The Task List feature is made of several different components:
 * JavaScript: frontend task list update behavior
 * CSS: styles Markdown task list items
 
-## Usage
+## Usage & Integration
 
-The backend components are designed for rendering the Task List item checkboxes, and the frontend components handle updating the Markdown when .
+The backend components are designed for rendering the Task List item checkboxes, and the frontend components handle updating the Markdown source (embedded in the markup).
 
 ### Backend: Markdown pipeline filter
 
