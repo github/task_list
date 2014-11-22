@@ -6,7 +6,7 @@ into your GitHub-flavored-Markdown user content.
 
 ## Components
 
-The Task List feature is actually made of several different components:
+The Task List feature is made of several different components:
 
 * GitHub-flavored-Markdown Ruby Filter
 * Summary Ruby Model: summarizes task list items
