@@ -8,14 +8,18 @@ into your GitHub-flavored-Markdown user content.
 
 The Task List feature is actually made of several different components:
 
-* GitHub-flavored-Markdown Filter
-* Model: summarizes task list items
-* JavaScript: task list update behavior
+* GitHub-flavored-Markdown Ruby Filter
+* Summary Ruby Model: summarizes task list items
+* JavaScript: frontend task list update behavior
 * CSS: styles Markdown task list items
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Task Lists are packaged as both a RubyGem with both backend and frontend behavior, and a Bower package wiht just the frontend behavior.
+
+### Backend: RubyGem
+
+For the backend Ruby components, add this line to your application's Gemfile:
 
     gem 'task_list'
 
@@ -23,7 +27,13 @@ And then execute:
 
     $ bundle
 
-### Rails 3+: Railtie method
+### Frontend: Bower
+
+For the frontend components, add `task_list` to your Bower dependencies config.
+
+This is the preferred method for including the frontend assets in your application. Alternatively, for Rails methods using `Sprockets`, see below.
+
+### Frontend: Rails 3+ Railtie method
 
 ``` ruby
 # config/application.rb
@@ -48,9 +58,9 @@ If you're not using Sprockets, you're on your own but it's pretty straight
 forward. `task_list/railtie` defines `TaskList.asset_paths` which you can use
 to manage building your asset bundles.
 
-### CoffeeScript Requirements
+### Dependencies
 
-Aside from requiring CoffeeScript, jQuery is the only other requirement.
+At a high level, the Ruby components integrate with the [`html-pipeline`](https://github.com/jch/html-pipeline) library, and the frontend components depend on the jQuery library. The frontend components are written in CoffeeScript and need to be preprocessed for production use.
 
 ## Testing and Development
 
@@ -58,7 +68,7 @@ JavaScript unit tests can be run with `script/testsuite`.
 
 Ruby unit tests can be run with `rake test`.
 
-Functional tests are more for manual testing in the browser. To run, install
+Functional tests are useful for manual testing in the browser. To run, install
 the necessary components with `script/bootstrap` then run the server:
 
 ```
