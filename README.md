@@ -40,7 +40,7 @@ This is the preferred method for including the frontend assets in your applicati
 require 'task_list/railtie'
 ```
 
-### Rails 2.3: Manual method
+### Frontend: Rails 2.3 Manual method
 
 Wherever you have your Sprockets setup:
 
