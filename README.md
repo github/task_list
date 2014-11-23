@@ -71,7 +71,7 @@ Read through the documented behaviors and samples [in the source][frontend_behav
 
 ## Installation
 
-Task Lists are packaged as both a RubyGem with both backend and frontend behavior, and a Bower package wiht just the frontend behavior.
+Task Lists are packaged as both a RubyGem with both backend and frontend behavior, and a Bower package with just the frontend behavior.
 
 ### Backend: RubyGem
 
