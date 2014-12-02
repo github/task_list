@@ -133,6 +133,10 @@ rackup -p 4011
 
 Navigate to http://localhost:4011/test/functional/test_task_lists_behavior.html
 
+## Community Integration
+- [Waffle.io](http://waffle.io)
+- [HuBoard](https://huboard.com/)
+
 ## Contributing
 
 Read the [Contributing Guidelines](CONTRIBUTING.md) and open a Pull Request!
