@@ -1,10 +1,11 @@
 language: ruby
+sudo: false
 install: ./script/bootstrap
 script: ./script/cibuild
 rvm:
   - 1.9.3
-  - 2.0.0
-  - 2.1.1
+  - 2.0
+  - 2.1
   - 2.2
 notifications:
   email: false
