@@ -25,8 +25,20 @@ class TaskList
 
   class Item < Struct.new(:checkbox_text, :source)
     Complete = /\[[xX]\]/.freeze # see TaskList::Filter
+
+    # Public: Check if a task list is complete.
+    #
+    # Examples
+    #
+    #   Item.new(checkbox_text: "- [x]").complete?
+    #   # => true
+    #
+    #   Item.new(checkbox_text: "- [ ]").complete?
+    #   # => false
+    #
+    # Returns true for checked list, false otherwise
     def complete?
-      checkbox_text =~ Complete
+      !!(checkbox_text =~ Complete)
     end
   end
 end
