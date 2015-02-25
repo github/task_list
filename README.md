@@ -1,5 +1,15 @@
 # Task Lists
 
+[![Gem Version](http://img.shields.io/gem/v/task_list.svg)][gem]
+[![Build Status](http://img.shields.io/travis/github/task_list.svg)][travis]
+[![Dependency Status](http://img.shields.io/gemnasium/github/task_list.svg)][gemnasium]
+[![Inline docs](http://inch-ci.org/github/github/task_list.svg?branch=master)][inchpages]
+
+[gem]: https://rubygems.org/gems/task_list
+[travis]: https://travis-ci.org/github/task_list
+[gemnasium]: https://gemnasium.com/github/task_list
+[inchpages]: http://inch-ci.org/github/github/task_list
+
 This package provides various components necessary for integrating
 [Task Lists](https://github.com/blog/1375-task-lists-in-gfm-issues-pulls-comments)
 into your GitHub-flavored-Markdown user content.
