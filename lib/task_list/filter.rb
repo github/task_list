@@ -54,7 +54,7 @@ class TaskList
 
     class XPathSelectorFunction
       def self.task_list_item(nodes)
-        nodes if nodes.text =~ ItemPattern
+        nodes.select { |node| node.text =~ ItemPattern }
       end
     end
 
@@ -95,12 +95,13 @@ class TaskList
         item.source.sub(ItemPattern, render_item_checkbox(item)), 'utf-8'
     end
 
-    # Public: Select all task lists from the `doc`.
+    # Public: Select all task list items within `container`.
     #
     # Returns an Array of Nokogiri::XML::Element objects for ordered and
-    # unordered lists.
-    def list_items
-      doc.xpath(ListItemSelector, XPathSelectorFunction)
+    # unordered lists. The container can either be the entire document (as
+    # returned by `#doc`) or an Element object.
+    def list_items(container)
+      container.xpath(ListItemSelector, XPathSelectorFunction)
     end
 
     # Filters the source for task list items.
@@ -112,7 +113,9 @@ class TaskList
     #
     # Returns nothing.
     def filter!
-      list_items.reverse.each do |li|
+      list_items(doc).reverse.each do |li|
+        next if list_items(li.parent).empty?
+
         add_css_class(li.parent, 'task-list')
 
         outer, inner =
