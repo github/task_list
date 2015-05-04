@@ -133,6 +133,15 @@ class TaskList::FilterTest < Minitest::Test
     assert_equal 2, filter(text)[:output].css("[checked]").size
   end
 
+  def test_no_class_on_generic_list
+    text = <<-md
+- Item one
+- Item two
+    md
+
+    assert_equal 0, filter(text)[:output].css('ul.task-list').size
+  end
+
   protected
 
   def filter(input, context = @context, result = nil)
