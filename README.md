@@ -57,7 +57,7 @@ Rendered HTML (the `<ul>` element below) should be contained in a `js-task-list-
 <div class="js-task-list-container">
   <ul class="task-list">
     <li class="task-list-item">
-      <input type="checkbox" class="js-task-list-item-checkbox" disabled />
+      <input type="checkbox" class="task-list-item-checkbox" disabled />
       text
     </li>
   </ul>
