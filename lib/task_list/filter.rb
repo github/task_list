@@ -41,7 +41,7 @@ class TaskList
     # Useful when you need iterate over all items.
     ItemPattern = /
       ^
-      (?:\s*[-+*]|(?:\d+\.))? # optional list prefix
+      (?:\s*[-+*|]|(?:\d+\.))? # optional list prefix
       \s*                     # optional whitespace prefix
       (                       # checkbox
         #{CompletePattern}|
