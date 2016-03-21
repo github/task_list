@@ -90,9 +90,9 @@ class TaskList
     # See [this pull](https://github.com/github/github/pull/8505) for details.
     #
     # Returns the marked up task list item Nokogiri::XML::NodeSet object.
-    def render_task_list_item(item)
+    def render_task_list_item(item, html)
       Nokogiri::HTML.fragment \
-        item.source.sub(ItemPattern, render_item_checkbox(item)), 'utf-8'
+        html.sub(ItemPattern, render_item_checkbox(item)), 'utf-8'
     end
 
     # Public: Select all task lists from the `doc`.
@@ -122,12 +122,12 @@ class TaskList
             [li, li.inner_html]
           end
         if match = (inner.chomp =~ ItemPattern && $1)
-          item = TaskList::Item.new(match, inner)
+          item = TaskList::Item.new(match)
           # prepend because we're iterating in reverse
           task_list_items.unshift item
 
           add_css_class(li, 'task-list-item')
-          outer.inner_html = render_task_list_item(item)
+          outer.inner_html = render_task_list_item(item, inner)
         end
       end
     end

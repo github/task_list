@@ -23,7 +23,7 @@ class TaskList
     @summary ||= TaskList::Summary.new(record.task_list_items)
   end
 
-  class Item < Struct.new(:checkbox_text, :source)
+  class Item < Struct.new(:checkbox_text)
     Complete = /\[[xX]\]/.freeze # see TaskList::Filter
 
     # Public: Check if a task list is complete.
