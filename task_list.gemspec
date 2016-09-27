@@ -4,12 +4,12 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'task_list/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "task_list"
+  gem.name          = "deckar01-task_list"
   gem.version       = TaskList::VERSION
-  gem.authors       = ["Matt Todd"]
-  gem.email         = ["matt@github.com"]
-  gem.description   = %q{GitHub-flavored-Markdown TaskList components}
-  gem.summary       = %q{GitHub-flavored-Markdown TaskList components}
+  gem.authors       = ["Jared Deckard", "Matt Todd"]
+  gem.email         = ["jared.deckard@gmail.com"]
+  gem.description   = %q{Markdown TaskList components}
+  gem.summary       = %q{Markdown TaskList components}
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
