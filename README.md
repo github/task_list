@@ -1,27 +1,18 @@
 # Task Lists
 
-*NOTE:* _This repository is no longer supported or updated by GitHub. If you wish to continue to develop this code yourself, we recommend you fork it._</code>
+[![Build Status](http://img.shields.io/travis/deckar01/task_list.svg)][travis]
 
-
-[![Gem Version](http://img.shields.io/gem/v/task_list.svg)][gem]
-[![Build Status](http://img.shields.io/travis/github/task_list.svg)][travis]
-[![Dependency Status](http://img.shields.io/gemnasium/github/task_list.svg)][gemnasium]
-[![Inline docs](http://inch-ci.org/github/github/task_list.svg?branch=master)][inchpages]
-
-[gem]: https://rubygems.org/gems/task_list
-[travis]: https://travis-ci.org/github/task_list
-[gemnasium]: https://gemnasium.com/github/task_list
-[inchpages]: http://inch-ci.org/github/github/task_list
+[travis]: https://travis-ci.org/deckar01/task_list
 
 This package provides various components necessary for integrating
 [Task Lists](https://github.com/blog/1375-task-lists-in-gfm-issues-pulls-comments)
-into your GitHub-flavored-Markdown user content.
+into your Markdown user content.
 
 ## Components
 
 The Task List feature is made of several different components:
 
-* GitHub-flavored-Markdown Ruby Filter
+* Markdown Ruby Filter
 * Summary Ruby Model: summarizes task list items
 * JavaScript: frontend task list update behavior
 * CSS: styles Markdown task list items
@@ -36,7 +27,7 @@ Rendering Task List item checkboxes from source Markdown depends on the `TaskLis
 
 ``` ruby
 require 'html/pipeline'
-require 'task_list/filter'
+require 'deckar01-task_list/filter'
 
 pipeline = HTML::Pipeline.new [
   HTML::Pipeline::MarkdownFilter,
@@ -80,7 +71,7 @@ NOTE: Updates are not persisted to the server automatically. Persistence is the 
 
 Read through the documented behaviors and samples [in the source][frontend_behaviors] for more detail, including documented events.
 
-[frontend_behaviors]: https://github.com/github/task_list/blob/master/app/assets/javascripts/task_list.coffee
+[frontend_behaviors]: https://github.com/deckar01/task_list/blob/master/app/assets/javascripts/task_list.coffee
 
 ## Installation
 
@@ -90,7 +81,7 @@ Task Lists are packaged as both a RubyGem with both backend and frontend behavio
 
 For the backend Ruby components, add this line to your application's Gemfile:
 
-    gem 'task_list'
+    gem 'deckar01-task_list'
 
 And then execute:
 
@@ -98,7 +89,7 @@ And then execute:
 
 ### Frontend: Bower
 
-For the frontend components, add `task_list` to your Bower dependencies config.
+For the frontend components, add `deckar01-task_list` to your Bower dependencies config.
 
 This is the preferred method for including the frontend assets in your application. Alternatively, for Rails methods using `Sprockets`, see below.
 
@@ -106,7 +97,7 @@ This is the preferred method for including the frontend assets in your applicati
 
 ``` ruby
 # config/application.rb
-require 'task_list/railtie'
+require 'deckar01-task_list/railtie'
 ```
 
 ### Frontend: Rails 2.3 Manual method
@@ -116,7 +107,7 @@ Wherever you have your Sprockets setup:
 ``` ruby
 Sprockets::Environment.new(Rails.root) do |env|
   # Load TaskList assets
-  require 'task_list/railtie'
+  require 'deckar01-task_list/railtie'
   TaskList.asset_paths.each do |path|
     env.append_path path
   end
@@ -124,7 +115,7 @@ end
 ```
 
 If you're not using Sprockets, you're on your own but it's pretty straight
-forward. `task_list/railtie` defines `TaskList.asset_paths` which you can use
+forward. `deckar01-task_list/railtie` defines `TaskList.asset_paths` which you can use
 to manage building your asset bundles.
 
 ### Dependencies
@@ -149,7 +140,3 @@ Navigate to http://localhost:4011/test/functional/test_task_lists_behavior.html
 ## Community Integration
 - [Waffle.io](http://waffle.io)
 - [HuBoard](https://huboard.com/)
-
-## Contributing
-
-Read the [Contributing Guidelines](CONTRIBUTING.md) and open a Pull Request!

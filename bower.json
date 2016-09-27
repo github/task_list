@@ -1,13 +1,13 @@
 {
-  "name": "task_list",
+  "name": "deckar01-task_list",
   "version": "1.0.2",
-  "description": "GitHub-flavored-Markdown TaskList components",
-  "homepage": "https://github.com/github/task_list",
+  "description": "Markdown TaskList components",
+  "homepage": "https://github.com/deckar01/task_list",
   "dependencies": {
     "jquery": ">= 1.9.1"
   },
   "devDependencies": {
-    "qunit": ">= 1.0"
+    "qunit": "^1.0.0"
   },
   "main": [
     "app/assets/javascripts/task_list.coffee",
