@@ -13,6 +13,14 @@ class TaskList::FilterTest < Minitest::Test
     @item_selector = "input.task-list-item-checkbox[type=checkbox]"
   end
 
+  def test_has_no_effect_on_lists_with_no_tasks
+    text = <<-md
+- plain
+- bullets
+    md
+    assert_equal 0, filter(text)[:output].css('ul.task-list').size
+  end
+
   def test_filters_items_in_a_list
     text = <<-md
 - [ ] incomplete
