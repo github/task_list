@@ -1,8 +1,5 @@
 # Task Lists
 
-*NOTE:* _This repository is no longer supported or updated by GitHub. If you wish to continue to develop this code yourself, we recommend you fork it._</code>
-
-
 [![Gem Version](http://img.shields.io/gem/v/task_list.svg)][gem]
 [![Build Status](http://img.shields.io/travis/github/task_list.svg)][travis]
 [![Dependency Status](http://img.shields.io/gemnasium/github/task_list.svg)][gemnasium]
